@@ -26,7 +26,9 @@ steps:
       - 'gcloud artifacts repositories describe hackspace-backend --location=asia-south1 || gcloud artifacts repositories create hackspace-backend --repository-format=docker --location=asia-south1 --description="Docker repository for hackspace-backend"'
 
   # Step 2: Build Docker image
+  # The trigger checks out the repo root. The Dockerfile lives in this folder.
   - name: 'gcr.io/cloud-builders/docker'
+    dir: hackspace-backend
     args:
       - 'build'
       - '-t'
