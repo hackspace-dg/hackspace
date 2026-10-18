@@ -99,7 +99,7 @@ def test_activity_search_filters_and_pages():
             "created_at": now,
             "user_id": "admin-1",
             "name": "Super Admin",
-            "email": "superadmin@challazo.com",
+            "email": "superadmin@hackspace.in",
             "role": "super_admin",
             "method": "GET",
             "path": "/hackathons",

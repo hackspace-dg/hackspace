@@ -217,7 +217,7 @@ export default function HackathonBoard({ hackathons = [], loading = false, error
             id="drop-board-title"
             className="text-2xl font-semibold tracking-[-0.025em] text-ink md:text-[32px]"
           >
-            {anyLive || loading ? 'Live right now' : 'Hackathons on Challazo'}
+            {anyLive || loading ? 'Live right now' : 'Hackathons on Hackspace'}
           </h2>
           {!loading && !error && hackathons.length > 0 && (
             <p className="font-mono text-[13px] text-muted tabular-nums" aria-live="polite">

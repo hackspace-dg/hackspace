@@ -45,6 +45,7 @@ venv.bak/
 .env.local
 .env.*.local
 firebase-config.json
+*-firebase-adminsdk-*.json
 
 # Testing
 .pytest_cache/

@@ -1,1 +1,1 @@
-"""AI Hackathon Evaluator Backend"""
+"""hackspace-backend"""

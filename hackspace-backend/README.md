@@ -1,4 +1,4 @@
-# AI Hackathon Evaluator Backend
+# Hackspace backend
 
 FastAPI backend for **HackNIAT** — students submit hackathon demo videos (record in-browser or upload from disk), admins assign **approved evaluators**, evaluators run **Gemini** AI analysis and submit scores for admin approval, and students see the final report/score only after approval.
 
@@ -332,7 +332,7 @@ Grant the Cloud Run service account access to read these secrets (same as your F
 | `SMTP_HOST` | substitution `_SMTP_HOST` | `smtp-relay.brevo.com` |
 | `SMTP_PORT` | substitution `_SMTP_PORT` | `587` |
 | `SMTP_FROM` | substitution `_SMTP_FROM` | `noreply@mail.nxtlab.tech` |
-| `SMTP_FROM_NAME` | env | `Challazo` |
+| `SMTP_FROM_NAME` | env | `Hackspace` |
 | `SMTP_USERNAME` | Secret Manager | `noreply@mail.nxtlab.tech` |
 | `SMTP_PASSWORD` | Secret Manager | Brevo SMTP key |
 
@@ -400,7 +400,7 @@ The backend then writes to Firestore `mail` and the extension sends via Brevo. *
 4. **Optional Cloud Run headroom** (SMTP still opens one connection per email):
 
 ```bash
-gcloud run services update ai-hackathon-evaluator-backend \
+gcloud run services update hackspace-backend \
   --region=asia-south1 \
   --max-instances=20 \
   --concurrency=80 \
@@ -1576,7 +1576,7 @@ As wired in `app/main.py` + `cloudbuild.yaml`: CORS with `allow_credentials=True
 | Variable | Typical value |
 |----------|----------------|
 | `ENVIRONMENT` | `production` (disables `/docs`, `/redoc`, `/openapi.json` unless `ENABLE_API_DOCS=true`) |
-| `ALLOWED_ORIGINS` | `https://challazo.nxtlab.tech` |
+| `ALLOWED_ORIGINS` | `https://hackspace.in` |
 | `COOKIE_SAMESITE` | `none` (with Secure cookies) |
 
 CORS **methods/headers** default to the SPA allow-list (`GET/POST/PATCH/DELETE/…`, `Authorization`, `Content-Type`, `X-CSRF-Token`, `Range`, …). Set `CORS_ALLOW_METHODS=*` or `CORS_ALLOW_HEADERS=*` only if you need the old wildcards.
@@ -1589,7 +1589,7 @@ Production uses **cookie auth** (`access_token` HttpOnly cookie) plus **CSRF dou
 
 On **same-origin** (e.g. `localhost:5173` → `localhost:8000`), the SPA may read `csrf_token` from `document.cookie`.
 
-On **cross-origin** (e.g. `challzo.vercel.app` → `*.run.app`), `document.cookie` on the frontend **cannot** see API-domain cookies — use the token from the **JSON body** instead:
+On **cross-origin** (e.g. `hackspace.in` → `*.run.app`), `document.cookie` on the frontend **cannot** see API-domain cookies — use the token from the **JSON body** instead:
 
 | When | Endpoint | Action |
 |------|----------|--------|
@@ -1609,13 +1609,13 @@ See [Frontend CSRF integration](#frontend-csrf-integration) below for copy-paste
 Applied in `cloudbuild.yaml` step 4 on `gs://$PROJECT_ID-hackathon-evaluations`. Origins come from the **`_GCS_CORS_ORIGINS`** substitution (comma-separated). Production default:
 
 ```
-https://challazo.nxtlab.tech,http://localhost:3000,http://localhost:5173
+https://hackspace.in,http://localhost:3000,http://localhost:5173
 ```
 
 Staging trigger override (see [Multi-environment deploy](#multi-environment-deploy-staging--production)):
 
 ```
-https://challzo.vercel.app,http://localhost:3000,http://localhost:5173
+https://hackspace.in,http://localhost:3000,http://localhost:5173
 ```
 
 Equivalent JSON shape:
@@ -1623,7 +1623,7 @@ Equivalent JSON shape:
 ```json
 [
   {
-    "origin": ["https://challazo.nxtlab.tech", "http://localhost:3000", "http://localhost:5173"],
+    "origin": ["https://hackspace.in", "http://localhost:3000", "http://localhost:5173"],
     "method": ["GET", "PUT", "HEAD", "OPTIONS"],
     "responseHeader": ["Content-Type", "Content-Length", "x-goog-resumable"],
     "maxAgeSeconds": 3600
@@ -1670,7 +1670,7 @@ One **`cloudbuild.yaml`** in git; **two GCP projects** (separate accounts), each
 |---|----------------|-------------|
 | Git branch | `master` | `dev-feature` |
 | GCP project | Production account | Staging account |
-| Frontend | `https://challazo.nxtlab.tech` | `https://challzo.vercel.app` |
+| Frontend | `https://hackspace.in` | `https://hackspace.in` |
 | Firebase | Production project | Staging project |
 
 ### Cloud Build trigger setup
@@ -1686,8 +1686,8 @@ Connect the **same GitHub repo** in each GCP project, then create one trigger pe
 | Substitutions | *(use file defaults, or set explicitly)* |
 
 ```
-_ALLOWED_ORIGINS = https://challazo.nxtlab.tech
-_GCS_CORS_ORIGINS = https://challazo.nxtlab.tech,http://localhost:3000,http://localhost:5173
+_ALLOWED_ORIGINS = https://hackspace.in
+_GCS_CORS_ORIGINS = https://hackspace.in,http://localhost:3000,http://localhost:5173
 _ENVIRONMENT = production
 _SEED_ON_STARTUP = false
 ```
@@ -1701,8 +1701,8 @@ _SEED_ON_STARTUP = false
 | Substitutions | **override all four** |
 
 ```
-_ALLOWED_ORIGINS = https://challzo.vercel.app
-_GCS_CORS_ORIGINS = https://challzo.vercel.app,http://localhost:3000,http://localhost:5173
+_ALLOWED_ORIGINS = https://hackspace.in
+_GCS_CORS_ORIGINS = https://hackspace.in,http://localhost:3000,http://localhost:5173
 _ENVIRONMENT = production
 _SEED_ON_STARTUP = true
 ```
@@ -1720,13 +1720,13 @@ Create the same secret **names** in each project with that environment's Firebas
 
 Point each frontend at its Cloud Run URL (Vercel env var, e.g. `VITE_API_URL`):
 
-- `challazo.nxtlab.tech` → production Cloud Run URL  
-- `challzo.vercel.app` → staging Cloud Run URL  
+- `hackspace.in` → production Cloud Run URL  
+- `hackspace.in` → staging Cloud Run URL  
 
 ### Merge workflow
 
 1. Develop on `dev-feature` → push → staging trigger deploys.  
-2. Test on `challzo.vercel.app`.  
+2. Test on `hackspace.in`.  
 3. Merge `dev-feature` → `master` → push → production trigger deploys.  
 4. Rebase/merge `master` back into `dev-feature` to stay in sync.
 
@@ -1744,7 +1744,7 @@ Staging overrides:
 
 ```bash
 gcloud builds submit --config=cloudbuild.yaml \
-  --substitutions=_ALLOWED_ORIGINS=https://challzo.vercel.app,_GCS_CORS_ORIGINS=https://challzo.vercel.app\,http://localhost:3000\,http://localhost:5173,_ENVIRONMENT=production,_SEED_ON_STARTUP=true
+  --substitutions=_ALLOWED_ORIGINS=https://hackspace.in,_GCS_CORS_ORIGINS=https://hackspace.in\,http://localhost:3000\,http://localhost:5173,_ENVIRONMENT=production,_SEED_ON_STARTUP=true
 ```
 
 ---
@@ -1842,7 +1842,7 @@ setCsrfToken(null);
 
 ### Do not use `document.cookie` for CSRF cross-origin
 
-`document.cookie` on `challzo.vercel.app` will be empty for API cookies — that is normal. Always use login JSON or `GET /auth/csrf`.
+`document.cookie` on `hackspace.in` will be empty for API cookies — that is normal. Always use login JSON or `GET /auth/csrf`.
 
 ---
 
@@ -1855,7 +1855,7 @@ These files define production deploy. Do not assume a different stack or pipelin
 | File | Role |
 |------|------|
 | [`app/main.py`](app/main.py) | FastAPI app: CORS (`allow_credentials=True` + `get_allowed_origins()`), lifespan `DatabaseSeeder`, routers, `/health`, `/`, `ValueError`→400 / `Exception`→500 |
-| [`pyproject.toml`](pyproject.toml) | Package `ai-hackathon-evaluator-backend` 1.0.0, Python ≥3.11, runtime + optional `dev` deps, Black/mypy |
+| [`pyproject.toml`](pyproject.toml) | Package `hackspace-backend` 1.0.0, Python ≥3.11, runtime + optional `dev` deps, Black/mypy |
 | [`requirements.txt`](requirements.txt) | Same runtime deps (FastAPI, uvicorn, pydantic, firebase-admin, google-cloud-storage, google-genai, dotenv, multipart, email-validator, requests) |
 | [`Dockerfile`](Dockerfile) | `python:3.11-slim` → `pip install -e .` from `pyproject.toml` → copy `app/` → **uvicorn on `0.0.0.0:8080`** (no `.env` in image) |
 | [`cloudbuild.yaml`](cloudbuild.yaml) | Artifact Registry → Docker build/push → GCS bucket + CORS → Cloud Run deploy |
@@ -1879,12 +1879,12 @@ Dev (optional `[dev]`): pytest, pytest-asyncio, black (line-length 100), flake8,
 
 ### Production deploy (`cloudbuild.yaml` + `Dockerfile`)
 
-1. Ensure Artifact Registry repo `ai-hackathon-evaluator-backend` in **asia-south1**  
-2. Build image → `asia-south1-docker.pkg.dev/$PROJECT_ID/ai-hackathon-evaluator-backend/ai-hackathon-evaluator-backend:$SHORT_SHA` (+ `:latest`)  
+1. Ensure Artifact Registry repo `hackspace-backend` in **asia-south1**  
+2. Build image → `asia-south1-docker.pkg.dev/$PROJECT_ID/hackspace-backend/hackspace-backend:$SHORT_SHA` (+ `:latest`)  
 3. Push `$SHORT_SHA` tag  
 4. Ensure bucket `gs://$PROJECT_ID-hackathon-evaluations` (create in **asia-south1** if missing) and apply GCS CORS from **`_GCS_CORS_ORIGINS`**  
 5. Ensure Cloud Tasks queue `evaluation-jobs` in **asia-south1**  
-6. Deploy Cloud Run service **`ai-hackathon-evaluator-backend`**:
+6. Deploy Cloud Run service **`hackspace-backend`**:
    - region: **asia-south1**
    - `--allow-unauthenticated`
    - secrets: Firebase set + `INTERNAL_JOB_SECRET`
@@ -1895,8 +1895,8 @@ Dev (optional `[dev]`): pytest, pytest-asyncio, black (line-length 100), flake8,
 
 | Substitution | Default |
 |--------------|---------|
-| `_ALLOWED_ORIGINS` | `https://challazo.nxtlab.tech` |
-| `_GCS_CORS_ORIGINS` | `https://challazo.nxtlab.tech,http://localhost:3000,http://localhost:5173` |
+| `_ALLOWED_ORIGINS` | `https://hackspace.in` |
+| `_GCS_CORS_ORIGINS` | `https://hackspace.in,http://localhost:3000,http://localhost:5173` |
 | `_ENVIRONMENT` | `production` |
 | `_SEED_ON_STARTUP` | `false` |
 

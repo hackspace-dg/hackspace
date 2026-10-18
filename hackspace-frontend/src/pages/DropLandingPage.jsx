@@ -7,7 +7,7 @@ import { useTheme } from '../theme/useTheme'
 import { formatDate } from '../utils/format'
 import { BrandLockup } from '../components/brand/BrandMark'
 import { GhostMark, HeroScene } from './landing/LandingArt'
-import './landing/challazo-home.css'
+import './landing/hackspace-home.css'
 
 const PITCH =
   "Find a hackathon, submit your build, and find out what's wrong with it before the deadline — not after."
@@ -528,7 +528,7 @@ function LiveListings({ hackathons, liveCount, loading, error, onRetry }) {
         <div className="hz-sechead">
           <div style={{ minWidth: 0 }}>
             <p className="hz-eyebrow hz-rv" style={{ maxWidth: 340 }}>
-              {liveCount || loading ? 'Live right now' : 'Hackathons on Challazo'}
+              {liveCount || loading ? 'Live right now' : 'Hackathons on Hackspace'}
             </p>
             <h2 id="hz-live-title" className="hz-rv">
               {boardHeading(hackathons.length, liveCount, loading)}
@@ -935,7 +935,7 @@ function FooterLink({ link }) {
 /* ------------------------------------------------------------------------ */
 
 export default function DropLandingPage() {
-  useDropSurface({ title: 'Challazo — Build. Ship. Drop.', description: PITCH })
+  useDropSurface({ title: 'Hackspace — Build. Ship. Drop.', description: PITCH })
 
   // One catalog poll for the whole page: badge, board, numbers and footer all
   // read the same data.
@@ -961,7 +961,7 @@ export default function DropLandingPage() {
 
       <header className="hz-header" id="top" ref={headerRef}>
         <div className="hz-wrap hz-nav">
-          <a className="hz-lockup" href="#top" aria-label="Challazo home">
+          <a className="hz-lockup" href="#top" aria-label="Hackspace home">
             <BrandLockup variant="arrow" size={30} fontSize={21} />
           </a>
           <nav className="hz-navlinks" aria-label="Primary">
@@ -982,10 +982,10 @@ export default function DropLandingPage() {
             <div>
               <LiveBadge count={liveCount} loading={loading} />
               <h1 id="hz-hero-title">
-                <span className="hz-sr">Build. Ship. Drop. Challazo</span>
+                <span className="hz-sr">Build. Ship. Drop. Hackspace</span>
                 <TypedLine />
                 <span className="hz-brandline" aria-hidden="true">
-                  <span className="hz-hl">Challazo</span>
+                  <span className="hz-hl">Hackspace</span>
                 </span>
               </h1>
               <p className="hz-lede">{PITCH}</p>
@@ -1083,7 +1083,7 @@ export default function DropLandingPage() {
             <div className="hz-rv">
               <h2 id="hz-org-title">Running a hackathon?</h2>
               <p>
-                List it on Challazo. Set your rubric, assign evaluators, and let the platform handle
+                List it on Hackspace. Set your rubric, assign evaluators, and let the platform handle
                 submissions, scoring, and feedback delivery.
               </p>
             </div>
@@ -1175,14 +1175,14 @@ export default function DropLandingPage() {
 
         <div className="hz-bigwrap" aria-hidden="true">
           <div className="hz-bigmark" ref={bigRef}>
-            CHALLAZO
+            HACKSPACE
           </div>
         </div>
 
         <div className="hz-wrap">
           <div className="hz-fbot">
             <div className="hz-set">
-              <span>© {new Date().getFullYear()} Challazo</span>
+              <span>© {new Date().getFullYear()} Hackspace</span>
               <span>Hyderabad, India</span>
               <LocalTime />
             </div>

@@ -1,6 +1,6 @@
 /**
- * The Challazo mark and the hero illustration. Pure SVG — every colour is a
- * token from challazo-home.css, so both follow the light/dark switch.
+ * The Hackspace mark and the hero illustration. Pure SVG — every colour is a
+ * token from hackspace-home.css, so both follow the light/dark switch.
  */
 
 /** Outline-only mark used as a watermark on generated card banners. */

@@ -59,7 +59,7 @@ export default function AuthShell({ children, wide = false }) {
   return (
     <div className="drop cza">
       <aside className="cza-brandside">
-        <Link className="cza-lockup cza-up" to="/" aria-label="Challazo home">
+        <Link className="cza-lockup cza-up" to="/" aria-label="Hackspace home">
           <BrandLockup variant="arrow" size={30} fontSize={21} />
         </Link>
 
@@ -75,7 +75,7 @@ export default function AuthShell({ children, wide = false }) {
             Build. Ship. Drop.
           </p>
           <p className="cza-bsub cza-up" style={{ animationDelay: '.24s' }}>
-            Most hackathons hand back a number. Challazo tells you what&rsquo;s wrong before the
+            Most hackathons hand back a number. Hackspace tells you what&rsquo;s wrong before the
             deadline, and why afterwards.
           </p>
 
@@ -93,7 +93,7 @@ export default function AuthShell({ children, wide = false }) {
         </div>
 
         <p className="cza-bfoot cza-up" style={{ animationDelay: '.58s' }}>
-          © {new Date().getFullYear()} Challazo
+          © {new Date().getFullYear()} Hackspace
         </p>
       </aside>
 

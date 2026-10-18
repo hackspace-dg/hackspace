@@ -40,7 +40,7 @@ WINNER_BODY = (
     "Team: {team_name}\n"
     "Score: {score}/100\n"
     "{prize_line}"
-    "Log in to Challazo and open this hackathon to see the full leaderboard.\n"
+    "Log in to Hackspace and open this hackathon to see the full leaderboard.\n"
 )
 MAX_WINNER_PLACES = 100
 

@@ -95,7 +95,7 @@ export default function LoginPage() {
   return (
     <AuthShell>
       <h1 className="cza-title">Welcome back</h1>
-      <p className="cza-lede">Sign in to continue to Challazo.</p>
+      <p className="cza-lede">Sign in to continue to Hackspace.</p>
 
       {/* Sessions last an hour and cannot be renewed, so say so plainly —
           otherwise being dropped here looks like the app losing your work. */}

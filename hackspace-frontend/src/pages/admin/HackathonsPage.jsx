@@ -218,7 +218,7 @@ export default function HackathonsPage() {
             <Icon name="trophy" size={22} />
           </span>
           <div>
-            <span className={EYEBROW}>Challazo events</span>
+            <span className={EYEBROW}>Hackspace events</span>
             <h1 className="mt-2 text-[28px] font-semibold tracking-[-0.03em] text-ink md:text-[36px]">
               Build. Compete. Make an impact.
             </h1>

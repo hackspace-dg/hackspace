@@ -133,7 +133,7 @@ export default function ProfileCompletionPage() {
         <div>
           <h1>Complete your profile</h1>
           <p className="text-muted">
-            Before you can use Challazo, verify your email and mobile number and add your employee
+            Before you can use Hackspace, verify your email and mobile number and add your employee
             ID. You only need to do this once.
           </p>
         </div>

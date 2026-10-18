@@ -148,8 +148,8 @@ export default function Navbar() {
     <>
       <div className="mobile-sidebar-bar">
         <Link to={homePath(user)} className="brand">
-          <BrandMark variant="c" size={32} title="Challazo" />
-          <span className="brand__name czm-wordmark">Challazo</span>
+          <BrandMark variant="c" size={32} title="Hackspace" />
+          <span className="brand__name czm-wordmark">Hackspace</span>
         </Link>
         <button
           type="button"
@@ -174,8 +174,8 @@ export default function Navbar() {
       <aside className={`sidebar ${open ? 'is-open' : ''}`}>
         <div className="sidebar__header">
           <Link to={homePath(user)} className="brand" onClick={() => setOpen(false)}>
-            <BrandMark variant="c" size={34} title="Challazo" />
-            <span className="brand__name czm-wordmark">Challazo</span>
+            <BrandMark variant="c" size={34} title="Hackspace" />
+            <span className="brand__name czm-wordmark">Hackspace</span>
           </Link>
           <button
             type="button"
@@ -189,7 +189,7 @@ export default function Navbar() {
 
         <div className="sidebar__workspace">
           <span>{isAdminRole(user.role) ? 'Administration' : 'Workspace'}</span>
-          <small>{isAdminRole(user.role) ? 'Manage Challazo' : 'Challazo portal'}</small>
+          <small>{isAdminRole(user.role) ? 'Manage Hackspace' : 'Hackspace portal'}</small>
         </div>
 
         <nav className="sidebar__nav" aria-label="Primary navigation">

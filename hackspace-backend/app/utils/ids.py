@@ -10,7 +10,7 @@ import os
 import time
 import uuid
 
-NAMESPACE = uuid.uuid5(uuid.NAMESPACE_DNS, "challazo.ai-hackathon-evaluator")
+NAMESPACE = uuid.uuid5(uuid.NAMESPACE_DNS, "hackspace.ai-hackathon-evaluator")
 
 
 def new_id() -> str:

@@ -1,5 +1,5 @@
 /*
- * Auth screens (sign in, register, forgot password) on the Challazo tokens.
+ * Auth screens (sign in, register, forgot password) on the Hackspace tokens.
  *
  * Unlayered and scoped to `.cza`, with `cza-` classes, so it overrides the
  * layered app styles without touching any other page. The register and

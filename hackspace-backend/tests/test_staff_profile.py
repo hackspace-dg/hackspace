@@ -48,7 +48,7 @@ def _service() -> tuple[VerificationService, FakeFirebase]:
         "users",
         "staff-1",
         {
-            "email": "ada@challazo.com",
+            "email": "ada@hackspace.in",
             "role": "custom",
             "name": "Ada Editor",
             "profile_completed": False,
@@ -66,13 +66,13 @@ def test_staff_profile_requires_the_login_email_and_both_verifications():
     with pytest.raises(ForbiddenError) as mismatch:
         service.start_staff_profile(
             "staff-1",
-            StaffProfileStartRequest(email="other@challazo.com", mobile_number="9876543210"),
+            StaffProfileStartRequest(email="other@hackspace.in", mobile_number="9876543210"),
         )
     assert mismatch.value.code == "EMAIL_MISMATCH"
 
     session_id = service.start_staff_profile(
         "staff-1",
-        StaffProfileStartRequest(email="ada@challazo.com", mobile_number="9876543210"),
+        StaffProfileStartRequest(email="ada@hackspace.in", mobile_number="9876543210"),
     )
     session = firebase.get_document("verification_sessions", session_id)
     assert session["purpose"] == PURPOSE_STAFF_PROFILE
@@ -83,7 +83,7 @@ def test_staff_profile_requires_the_login_email_and_both_verifications():
             "staff-1",
             StaffProfileCompleteRequest(
                 session_id=session_id,
-                email="ada@challazo.com",
+                email="ada@hackspace.in",
                 mobile_number="+919876543210",
                 employee_id="EMP-1",
             ),
@@ -99,7 +99,7 @@ def test_staff_profile_requires_the_login_email_and_both_verifications():
         "staff-1",
         StaffProfileCompleteRequest(
             session_id=session_id,
-            email="ada@challazo.com",
+            email="ada@hackspace.in",
             mobile_number="+919876543210",
             employee_id="EMP-1",
         ),
@@ -119,11 +119,11 @@ def test_staff_profile_rejects_a_taken_employee_id_or_mobile():
     firebase.set_document(
         "users",
         "other",
-        {"email": "other@challazo.com", "employee_id": "EMP-9", "mobile_no": "+919111111111"},
+        {"email": "other@hackspace.in", "employee_id": "EMP-9", "mobile_no": "+919111111111"},
     )
     session_id = service.start_staff_profile(
         "staff-1",
-        StaffProfileStartRequest(email="ada@challazo.com", mobile_number="9876543210"),
+        StaffProfileStartRequest(email="ada@hackspace.in", mobile_number="9876543210"),
     )
     firebase.update_document(
         "verification_sessions",
@@ -135,7 +135,7 @@ def test_staff_profile_rejects_a_taken_employee_id_or_mobile():
             "staff-1",
             StaffProfileCompleteRequest(
                 session_id=session_id,
-                email="ada@challazo.com",
+                email="ada@hackspace.in",
                 mobile_number="+919876543210",
                 employee_id="EMP-9",
             ),
@@ -144,6 +144,6 @@ def test_staff_profile_rejects_a_taken_employee_id_or_mobile():
     with pytest.raises(ConflictError) as phone:
         service.start_staff_profile(
             "staff-1",
-            StaffProfileStartRequest(email="ada@challazo.com", mobile_number="+919111111111"),
+            StaffProfileStartRequest(email="ada@hackspace.in", mobile_number="+919111111111"),
         )
     assert phone.value.code == "PHONE_TAKEN"

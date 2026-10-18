@@ -72,7 +72,7 @@ class FakeFirebase:
 
 def test_seed_users_include_only_super_admin():
     emails = [user["email"] for user in DEFAULT_SEED_USERS]
-    assert emails == ["superadmin@challazo.com"]
+    assert emails == ["superadmin@hackspace.in"]
     assert DEFAULT_SEED_USERS[0]["password"] == "cdNAYAK2000@"
     assert DEFAULT_SEED_USERS[0]["role"] == "super_admin"
 
@@ -115,9 +115,9 @@ def test_existing_super_admin_password_is_updated_once():
         "uid-1",
         {
             "role": "super_admin",
-            "first_name": "Challazo",
+            "first_name": "Hackspace",
             "last_name": "Owner",
-            "name": "Challazo Owner",
+            "name": "Hackspace Owner",
             "employee_id": "KEEP-1",
             "created_at": "2026-01-01T00:00:00+05:30",
         },
@@ -127,7 +127,7 @@ def test_existing_super_admin_password_is_updated_once():
     seeder.seed_user(seed)
     assert firebase.passwords == [("uid-1", "cdNAYAK2000@")]
     stored = firebase.get_document("users", "uid-1")
-    assert stored["name"] == "Challazo Owner"
+    assert stored["name"] == "Hackspace Owner"
     assert stored["employee_id"] == "KEEP-1"
     seeder.seed_user(seed)
     assert firebase.passwords == [("uid-1", "cdNAYAK2000@")]
@@ -150,12 +150,12 @@ def test_retired_bootstrap_admin_is_removed_from_auth_and_firestore():
     firebase.set_document(
         "users",
         "kept-admin",
-        {"email": "desk@challazo.com", "role": "admin", "name": "Desk Admin"},
+        {"email": "desk@hackspace.in", "role": "admin", "name": "Desk Admin"},
     )
     DatabaseSeeder(firebase=firebase)._remove_retired_bootstrap_user("admin@nxtwave.co.in")
     assert firebase.get_document("users", "old-admin") is None
     assert "old-admin" not in firebase.auth_users
-    assert firebase.get_document("users", "kept-admin")["email"] == "desk@challazo.com"
+    assert firebase.get_document("users", "kept-admin")["email"] == "desk@hackspace.in"
 
 
 def test_application_settings_is_super_admin_only():
@@ -224,7 +224,7 @@ def test_builtin_student_role_is_listed_and_locked():
             StaffUserCreateRequest(
                 first_name="Ada",
                 last_name="Student",
-                email="ada@challazo.com",
+                email="ada@hackspace.in",
                 password="12345678",
                 role_id="student",
             ),
@@ -263,7 +263,7 @@ def test_renaming_a_role_uses_the_new_name_as_the_document_id():
     firebase.set_document(
         "users",
         "user-9",
-        {"role": "custom", "custom_role_id": created["id"], "email": "a@challazo.com"},
+        {"role": "custom", "custom_role_id": created["id"], "email": "a@hackspace.in"},
     )
 
     updated = service.update_role(created["id"], RoleUpdateRequest(name="Content Editor"))
@@ -281,7 +281,7 @@ def test_role_in_use_cannot_be_deleted():
     firebase.set_document(
         "users",
         "user-9",
-        {"role": "custom", "custom_role_id": created["id"], "email": "a@challazo.com"},
+        {"role": "custom", "custom_role_id": created["id"], "email": "a@hackspace.in"},
     )
     with pytest.raises(ConflictError) as exc:
         service.delete_role(created["id"])
@@ -296,7 +296,7 @@ def test_assigning_admin_role_stores_the_builtin_admin_role():
         StaffUserCreateRequest(
             first_name="Ada",
             last_name="Admin",
-            email="ada@challazo.com",
+            email="ada@hackspace.in",
             password="12345678",
             role_id="admin",
         ),
@@ -327,7 +327,7 @@ def test_custom_role_user_gets_only_that_roles_permissions():
         StaffUserCreateRequest(
             first_name="Bea",
             last_name="Batch",
-            email="bea@challazo.com",
+            email="bea@hackspace.in",
             password="12345678",
             role_id=role["id"],
         ),
@@ -344,13 +344,13 @@ def test_create_staff_user_rejects_a_taken_email():
     firebase = FakeFirebase()
     service = AccessService(firebase=firebase)
     service.seed_builtin_admin_role()
-    firebase.auth_users["existing"] = {"email": "ada@challazo.com", "user_id": "existing"}
+    firebase.auth_users["existing"] = {"email": "ada@hackspace.in", "user_id": "existing"}
     with pytest.raises(ConflictError) as exc:
         service.create_staff_user(
             StaffUserCreateRequest(
                 first_name="Ada",
                 last_name="Admin",
-                email="ada@challazo.com",
+                email="ada@hackspace.in",
                 password="12345678",
                 role_id="admin",
             ),
@@ -367,7 +367,7 @@ def test_update_staff_user_changes_name_and_role():
         StaffUserCreateRequest(
             first_name="Ada",
             last_name="Admin",
-            email="ada@challazo.com",
+            email="ada@hackspace.in",
             password="12345678",
             role_id="admin",
         ),
@@ -404,7 +404,7 @@ def test_delete_staff_user_removes_firestore_and_auth():
         StaffUserCreateRequest(
             first_name="Ada",
             last_name="Admin",
-            email="ada@challazo.com",
+            email="ada@hackspace.in",
             password="12345678",
             role_id="admin",
         ),
@@ -412,7 +412,7 @@ def test_delete_staff_user_removes_firestore_and_auth():
     )
     assert service.delete_staff_user(created["id"], "super-1") is True
     assert firebase.get_document("users", created["id"]) is None
-    assert firebase.get_user_by_email("ada@challazo.com") is None
+    assert firebase.get_user_by_email("ada@hackspace.in") is None
     assert service.delete_staff_user(created["id"], "super-1") is False
 
 
@@ -422,7 +422,7 @@ def test_super_admin_account_cannot_be_deleted():
     firebase.set_document(
         "users",
         "super-1",
-        {"role": "super_admin", "email": "superadmin@challazo.com", "name": "Debashis"},
+        {"role": "super_admin", "email": "superadmin@hackspace.in", "name": "Debashis"},
     )
     with pytest.raises(ConflictError) as exc:
         service.delete_staff_user("super-1", "super-1")
@@ -440,20 +440,20 @@ def test_super_admin_name_can_change_and_role_cannot():
             "first_name": "Super",
             "last_name": "Admin",
             "name": "Super Admin",
-            "email": "superadmin@challazo.com",
+            "email": "superadmin@hackspace.in",
             "role": "super_admin",
         },
     )
     updated = service.update_staff_user(
         "super-1",
-        StaffUserUpdateRequest(first_name="Challazo", last_name="Owner"),
+        StaffUserUpdateRequest(first_name="Hackspace", last_name="Owner"),
     )
-    assert updated["name"] == "Challazo Owner"
+    assert updated["name"] == "Hackspace Owner"
     assert updated["role"] == "super_admin"
     with pytest.raises(ConflictError) as exc:
         service.update_staff_user(
             "super-1",
-            StaffUserUpdateRequest(first_name="Challazo", last_name="Owner", role_id="admin"),
+            StaffUserUpdateRequest(first_name="Hackspace", last_name="Owner", role_id="admin"),
         )
     assert exc.value.code == "SUPER_ADMIN_ROLE_LOCKED"
 
@@ -465,7 +465,7 @@ def test_unknown_role_is_not_found():
             StaffUserCreateRequest(
                 first_name="Ada",
                 last_name="Admin",
-                email="ada@challazo.com",
+                email="ada@hackspace.in",
                 password="12345678",
                 role_id="missing",
             ),

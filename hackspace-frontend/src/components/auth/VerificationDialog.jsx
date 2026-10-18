@@ -192,7 +192,7 @@ export default function VerificationDialog() {
             Verify your account
           </h2>
           <p className="mt-1 text-[13.5px] text-muted">
-            Confirm the contact details on your account to keep using Challazo. This takes a minute.
+            Confirm the contact details on your account to keep using Hackspace. This takes a minute.
           </p>
         </div>
         <div className="px-6 py-5">

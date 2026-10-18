@@ -18,8 +18,7 @@ export function firebasePhoneMessage(err) {
       if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
         return (
           'Phone verification does not work on localhost. Open http://127.0.0.1:5173 ' +
-          '(not localhost), add 127.0.0.1 in Firebase → Authentication → Authorized domains, ' +
-          'or test on staging (challzo.vercel.app).'
+          '(not localhost) and add 127.0.0.1 in Firebase → Authentication → Authorized domains.'
         )
       }
       return (

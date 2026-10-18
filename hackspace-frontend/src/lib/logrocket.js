@@ -18,7 +18,7 @@ import * as logrocketReactModule from 'logrocket-react'
  * Review https://docs.logrocket.com/reference/dom before relaxing any of it.
  */
 
-const APP_ID = import.meta.env.VITE_LOGROCKET_APP_ID || '1fgx0o/challazo'
+const APP_ID = import.meta.env.VITE_LOGROCKET_APP_ID || ''
 
 const flag = import.meta.env.VITE_LOGROCKET_ENABLED
 const ENABLED = flag === 'true' || (flag !== 'false' && import.meta.env.PROD)
@@ -104,7 +104,7 @@ export function sanitizeResponse(response) {
 
 /** Start recording. Call once, as early as possible (before React renders). */
 export function initLogRocket() {
-  if (!ENABLED || started || typeof window === 'undefined' || !LogRocket) return
+  if (!ENABLED || started || typeof window === 'undefined' || !LogRocket || !APP_ID) return
   safely('init', () => {
     LogRocket.init(APP_ID, {
       release: RELEASE,

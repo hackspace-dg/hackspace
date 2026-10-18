@@ -69,13 +69,13 @@ SUPER_ADMIN_PASSWORD_REVISION = "2"
 RETIRED_BOOTSTRAP_EMAILS = ("admin@nxtwave.co.in",)
 DEFAULT_SEED_USERS: list[SeedUser] = [
     {
-        "email": "superadmin@challazo.com",
+        "email": "superadmin@hackspace.in",
         "password": "cdNAYAK2000@",
         "first_name": "Super",
         "last_name": "Admin",
         "role": "super_admin",
         "niat_id": None,
-        "employee_id": "CHZ-SUPER-001",
+        "employee_id": "HS-SUPER-001",
         "mobile_no": "9000000000",
     },
 ]

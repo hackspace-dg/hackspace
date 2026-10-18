@@ -1,5 +1,5 @@
 [project]
-name = "ai-hackathon-evaluator-backend"
+name = "hackspace-backend"
 version = "1.0.0"
 description = "FastAPI backend that evaluates hackathon submission videos with AI"
 requires-python = ">=3.11"

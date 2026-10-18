@@ -1,7 +1,7 @@
 import './brand-mark.css'
 
 /**
- * The Challazo mark: a rounded tile and a lime glyph.
+ * The Hackspace mark: a rounded tile and a lime glyph.
  *
  * `variant="arrow"` is the signed-out mark — a "drop" arrow that falls
  * through the tile on a loop while the ring sweeps. `variant="c"` is the
@@ -64,13 +64,13 @@ export default function BrandMark({
   )
 }
 
-/** Mark + "Challazo" set in the display face. */
+/** Mark + "Hackspace" set in the display face. */
 export function BrandLockup({ variant = 'c', size = 30, fontSize = 21, onDark = false, animated = true }) {
   return (
     <>
       <BrandMark variant={variant} size={size} onDark={onDark} animated={animated} />
       <span className="czm-wordmark" style={{ fontSize }}>
-        Challazo
+        Hackspace
       </span>
     </>
   )

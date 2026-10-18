@@ -1,4 +1,4 @@
-# Architecture — AI Hackathon Evaluator Backend
+# Architecture — hackspace-backend
 
 This document describes the **current** backend: a FastAPI API that runs hackathons (rounds, teams, submissions), AI-assisted video evaluation, optional GitHub repository analysis, admin review, and per-round leaderboards.
 
@@ -41,8 +41,8 @@ There is **no Postgres**. Firestore is the system of record. Analysis does not u
 
 ```mermaid
 flowchart LR
-  SPA["SPA\nChallazo / Vercel"]
-  CR["Cloud Run\nai-hackathon-evaluator-backend\nasia-south1"]
+  SPA["SPA\nHackspace / Vercel"]
+  CR["Cloud Run\nhackspace-backend\nasia-south1"]
   AUTH["Firebase Auth\nIdentity Toolkit"]
   FS["Cloud Firestore"]
   GCS["GCS\nhackathon-evaluations"]
@@ -496,7 +496,7 @@ Cloud Build (cloudbuild.yaml)
   → Artifact Registry asia-south1
   → ensure GCS bucket + CORS
   → ensure Cloud Tasks queue evaluation-jobs
-  → Cloud Run service ai-hackathon-evaluator-backend
+  → Cloud Run service hackspace-backend
 ```
 
 | Environment | Entry |

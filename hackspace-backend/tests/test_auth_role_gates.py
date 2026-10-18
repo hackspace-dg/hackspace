@@ -22,7 +22,7 @@ def _request(path: str, method: str = "GET") -> Request:
 def test_incomplete_staff_profile_blocks_app_screens():
     user = CurrentUser(
         user_id="custom-1",
-        email="review@challazo.com",
+        email="review@hackspace.in",
         role="custom",
         name="Reviewer",
         profile_completed=False,
@@ -42,7 +42,7 @@ def test_get_admin_user_allows_admin(admin_user: CurrentUser):
 def test_get_admin_user_allows_super_admin():
     super_admin = CurrentUser(
         user_id="super-1",
-        email="superadmin@challazo.com",
+        email="superadmin@hackspace.in",
         role="super_admin",
         name="Super Admin",
     )
@@ -52,7 +52,7 @@ def test_get_admin_user_allows_super_admin():
 def test_get_admin_user_allows_custom_role_on_matching_path():
     reviewer = CurrentUser(
         user_id="custom-1",
-        email="review@challazo.com",
+        email="review@hackspace.in",
         role="custom",
         name="Reviewer",
         permissions=["themes"],
@@ -80,7 +80,7 @@ def test_overview_permission_can_read_dashboard_lists():
 def test_get_admin_user_rejects_custom_role_without_permission():
     reviewer = CurrentUser(
         user_id="custom-1",
-        email="review@challazo.com",
+        email="review@hackspace.in",
         role="custom",
         name="Reviewer",
         permissions=["themes"],

@@ -45,9 +45,9 @@ def test_profile_updates_name_and_leaves_email_and_mobile():
             "first_name": "Super",
             "last_name": "Admin",
             "name": "Super Admin",
-            "email": "superadmin@challazo.com",
+            "email": "superadmin@hackspace.in",
             "mobile_no": "9000000000",
-            "employee_id": "CHZ-SUPER-001",
+            "employee_id": "HS-SUPER-001",
         },
     )
     firebase.set_document(
@@ -65,12 +65,12 @@ def test_profile_updates_name_and_leaves_email_and_mobile():
     )
     service = UserService(firebase=firebase)
 
-    updated = service.update_own_profile("sa", "Challazo", "Owner", "CHZ-2")
-    assert updated["name"] == "Challazo Owner"
-    assert updated["email"] == "superadmin@challazo.com"
+    updated = service.update_own_profile("sa", "Hackspace", "Owner", "CHZ-2")
+    assert updated["name"] == "Hackspace Owner"
+    assert updated["email"] == "superadmin@hackspace.in"
     assert updated["mobile_no"] == "9000000000"
     assert updated["employee_id"] == "CHZ-2"
-    assert firebase.display_names["sa"] == "Challazo Owner"
+    assert firebase.display_names["sa"] == "Hackspace Owner"
 
     student = service.update_own_profile("student-1", "Asha", "Nair")
     assert student["name"] == "Asha Nair"
@@ -84,14 +84,14 @@ def test_employee_id_must_stay_unique():
     firebase.set_document(
         "users",
         "sa",
-        {"role": "super_admin", "email": "a@challazo.com", "employee_id": "CHZ-1"},
+        {"role": "super_admin", "email": "a@hackspace.in", "employee_id": "CHZ-1"},
     )
     firebase.set_document(
         "users",
         "other",
-        {"role": "admin", "email": "desk@challazo.com", "employee_id": "TAKEN"},
+        {"role": "admin", "email": "desk@hackspace.in", "employee_id": "TAKEN"},
     )
     service = UserService(firebase=firebase)
     with pytest.raises(ConflictError) as exc:
-        service.update_own_profile("sa", "Challazo", "Owner", "TAKEN")
+        service.update_own_profile("sa", "Hackspace", "Owner", "TAKEN")
     assert exc.value.code == "EMPLOYEE_ID_TAKEN"

@@ -90,7 +90,7 @@ def test_reset_database_wipes_collections_and_keeps_only_super_admin(monkeypatch
     firebase.delete_documents.side_effect = lambda coll, ids: len(ids)
     # Auth has Firestore users PLUS an orphan from a previous incomplete wipe.
     firebase.list_auth_users.return_value = [
-        {"uid": "super-1", "email": "superadmin@challazo.com"},
+        {"uid": "super-1", "email": "superadmin@hackspace.in"},
         {"uid": "admin-1", "email": "admin@nxtwave.co.in"},
         {"uid": "student-1", "email": "student@example.com"},
         {"uid": "eval-1", "email": "eval@example.com"},
