@@ -1,0 +1,87 @@
+# Frontend Cloud Run service. The browser calls /api on this host.
+# nginx proxies that prefix to the hackspace-backend Cloud Run URL.
+substitutions:
+  _BACKEND_URL: ''
+  _VITE_API_BASE_URL: '/api'
+  _VITE_FIREBASE_API_KEY: 'AIzaSyDLFobqa2pSwtunqhyVu6uBdQXVHkJQVOM'
+  _VITE_FIREBASE_AUTH_DOMAIN: 'hackspace-dg.firebaseapp.com'
+  _VITE_FIREBASE_PROJECT_ID: 'hackspace-dg'
+  _VITE_FIREBASE_APP_ID: '1:180855281862:web:d790f14847139fd8f49fc7'
+
+steps:
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - 'gcloud artifacts repositories describe hackspace-frontend --location=asia-south1 || gcloud artifacts repositories create hackspace-frontend --repository-format=docker --location=asia-south1 --description="Docker repository for hackspace-frontend"'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: hackspace-frontend
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'VITE_API_BASE_URL=${_VITE_API_BASE_URL}'
+      - '--build-arg'
+      - 'VITE_FIREBASE_API_KEY=${_VITE_FIREBASE_API_KEY}'
+      - '--build-arg'
+      - 'VITE_FIREBASE_AUTH_DOMAIN=${_VITE_FIREBASE_AUTH_DOMAIN}'
+      - '--build-arg'
+      - 'VITE_FIREBASE_PROJECT_ID=${_VITE_FIREBASE_PROJECT_ID}'
+      - '--build-arg'
+      - 'VITE_FIREBASE_APP_ID=${_VITE_FIREBASE_APP_ID}'
+      - '-t'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/hackspace-frontend/hackspace-frontend:$SHORT_SHA'
+      - '-t'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/hackspace-frontend/hackspace-frontend:latest'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/hackspace-frontend/hackspace-frontend:$SHORT_SHA'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        set -euo pipefail
+        BACKEND_URL="${_BACKEND_URL}"
+        if [ -z "$$BACKEND_URL" ]; then
+          BACKEND_URL=$$(gcloud run services describe hackspace-backend \
+            --region=asia-south1 --format='value(status.url)')
+        fi
+        BACKEND_URL=$${BACKEND_URL%/}
+        echo "Proxying /api to $$BACKEND_URL"
+
+        gcloud run deploy hackspace-frontend \
+          --image=asia-south1-docker.pkg.dev/$PROJECT_ID/hackspace-frontend/hackspace-frontend:$SHORT_SHA \
+          --region=asia-south1 \
+          --allow-unauthenticated \
+          --set-env-vars=BACKEND_URL=$$BACKEND_URL \
+          --memory=512Mi \
+          --cpu=1 \
+          --timeout=3600 \
+          --port=8080
+
+        FRONTEND_URL=$$(gcloud run services describe hackspace-frontend \
+          --region=asia-south1 --format='value(status.url)')
+        echo "Frontend URL: $$FRONTEND_URL"
+
+        gcloud run services update hackspace-backend \
+          --region=asia-south1 \
+          --update-env-vars=COOKIE_SAMESITE=lax,ALLOWED_ORIGINS=$$FRONTEND_URL
+
+        BUCKET=gs://$PROJECT_ID-hackathon-evaluations
+        python3 -c 'import json,sys; origin=sys.argv[1]; json.dump([{"origin":[origin,"http://127.0.0.1:5173","http://localhost:5173","http://localhost:3000"],"method":["GET","PUT","HEAD","OPTIONS"],"responseHeader":["Content-Type","Content-Length","x-goog-resumable"],"maxAgeSeconds":3600}], open("/tmp/cors.json","w"))' "$$FRONTEND_URL"
+        gcloud storage buckets update "$$BUCKET" --cors-file=/tmp/cors.json
+
+images:
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/hackspace-frontend/hackspace-frontend:$SHORT_SHA'
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/hackspace-frontend/hackspace-frontend:latest'
+
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: '1800s'
