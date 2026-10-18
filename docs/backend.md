@@ -1,10 +1,12 @@
 # Hackspace backend
 
-FastAPI backend for **HackNIAT** — students submit hackathon demo videos (record in-browser or upload from disk), admins assign **approved evaluators**, evaluators run **Gemini** AI analysis and submit scores for admin approval, and students see the final report/score only after approval.
+Commands in this document run from `hackspace-backend/`.
 
-Stack: **Firebase Auth + Firestore**, **Google Cloud Storage** (videos), **Vertex AI / Gemini** (multimodal video analysis), deployable to **Cloud Run**.
+FastAPI backend for **Hackspace**. Students submit hackathon demo videos (record in-browser or upload from disk), admins assign **approved evaluators**, evaluators run **Gemini** AI analysis and submit scores for admin approval, and students see the final report and score only after approval.
 
-**System design:** [docs/architecture.md](docs/architecture.md) — layers, service graph, Firestore collections, evaluation jobs, and domain flows. API contracts and frontend handoff stay in this README.
+Stack: **Firebase Auth + Firestore**, **Google Cloud Storage** (videos), **Vertex AI / Gemini** (multimodal video analysis), deployed to **Cloud Run**.
+
+**System design:** [architecture.md](architecture.md). **How to deploy:** [deployment.md](deployment.md). API contracts stay in this file.
 
 ## Quick start
 
@@ -1569,19 +1571,13 @@ curl -X POST http://localhost:8000/submissions/from-upload \
 
 ---
 
-## Production (cross-origin frontend)
+## Production
 
-As wired in `app/main.py` + `cloudbuild.yaml`: CORS with `allow_credentials=True` and explicit origins from `get_allowed_origins()` / `ALLOWED_ORIGINS`. Production deploy sets:
+Current production is one Google Cloud project. The browser talks only to `hackspace-frontend`. nginx proxies `/api` to `hackspace-backend` and keeps login cookies on the frontend host. Deploy steps are in [deployment.md](deployment.md).
 
-| Variable | Typical value |
-|----------|----------------|
-| `ENVIRONMENT` | `production` (disables `/docs`, `/redoc`, `/openapi.json` unless `ENABLE_API_DOCS=true`) |
-| `ALLOWED_ORIGINS` | `https://hackspace.in` |
-| `COOKIE_SAMESITE` | `none` (with Secure cookies) |
+`app/main.py` still enables credentialed CORS from `ALLOWED_ORIGINS`. The frontend Cloud Build sets that to the frontend Cloud Run URL and sets `COOKIE_SAMESITE=lax`, because the browser never calls the backend host. `ENVIRONMENT=production` disables `/docs`, `/redoc`, and `/openapi.json` unless `ENABLE_API_DOCS=true`.
 
-CORS **methods/headers** default to the SPA allow-list (`GET/POST/PATCH/DELETE/…`, `Authorization`, `Content-Type`, `X-CSRF-Token`, `Range`, …). Set `CORS_ALLOW_METHODS=*` or `CORS_ALLOW_HEADERS=*` only if you need the old wildcards.
-
-Frontend must send `credentials: "include"`.
+The SPA sends `credentials: "include"`.
 
 ### CSRF (cross-origin SPA)
 
@@ -1718,10 +1714,7 @@ Create the same secret **names** in each project with that environment's Firebas
 
 ### Frontend API URL
 
-Point each frontend at its Cloud Run URL (Vercel env var, e.g. `VITE_API_URL`):
-
-- `hackspace.in` → production Cloud Run URL  
-- `hackspace.in` → staging Cloud Run URL  
+The production SPA does not call the backend hostname. `VITE_API_BASE_URL=/api`, and nginx on `hackspace-frontend` forwards that prefix. See [deployment.md](deployment.md).
 
 ### Merge workflow
 
@@ -1751,7 +1744,7 @@ gcloud builds submit --config=cloudbuild.yaml \
 
 ## Frontend CSRF integration
 
-Use this when the SPA and API are on **different origins** (Vercel + Cloud Run).
+On the deployed frontend, `/api` is same-origin, so the SPA can read the `csrf_token` cookie. The client also keeps the token from the login JSON and `GET /auth/csrf`. The notes below are the contract if a client ever calls the API host directly.
 
 ### 1. Store the token (module-level or React context)
 
@@ -1848,7 +1841,7 @@ setCsrfToken(null);
 
 ## Architecture & deployment (source of truth)
 
-Current system design (layers, data stores, flows): **[docs/architecture.md](docs/architecture.md)**.
+Current system design (layers, data stores, flows): **[architecture.md](architecture.md)**.
 
 These files define production deploy. Do not assume a different stack or pipeline.
 
@@ -1921,7 +1914,7 @@ See [.env.example](.env.example) for local development. Production secrets/env c
 
 ## Project layout
 
-See [docs/architecture.md](docs/architecture.md) for the full tree and service graph. Summary:
+See [architecture.md](architecture.md) for the full tree and service graph. Summary:
 
 ```
 app/

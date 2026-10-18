@@ -2,7 +2,7 @@
 
 This document describes the **current** backend: a FastAPI API that runs hackathons (rounds, teams, submissions), AI-assisted video evaluation, optional GitHub repository analysis, admin review, and per-round leaderboards.
 
-API contracts and frontend handoff live in the [README](../README.md). This file is the system design.
+API contracts and frontend handoff live in [backend.md](backend.md). This file is the system design. Paths such as `app/` are relative to `hackspace-backend/`.
 
 ---
 
@@ -41,7 +41,7 @@ There is **no Postgres**. Firestore is the system of record. Analysis does not u
 
 ```mermaid
 flowchart LR
-  SPA["SPA\nHackspace / Vercel"]
+  SPA["Cloud Run\nhackspace-frontend\nnginx /api proxy"]
   CR["Cloud Run\nhackspace-backend\nasia-south1"]
   AUTH["Firebase Auth\nIdentity Toolkit"]
   FS["Cloud Firestore"]
@@ -492,19 +492,25 @@ Cloud Run: **1 GiB / 1 CPU / 3600s timeout**, `--allow-unauthenticated` (auth is
 ## 13. Deployment
 
 ```text
-Cloud Build (cloudbuild.yaml)
+hackspace-backend/cloudbuild.yaml
   → Artifact Registry asia-south1
-  → ensure GCS bucket + CORS
-  → ensure Cloud Tasks queue evaluation-jobs
+  → GCS bucket + CORS
+  → Cloud Tasks queue evaluation-jobs
   → Cloud Run service hackspace-backend
+
+hackspace-frontend/cloudbuild.yaml
+  → Artifact Registry asia-south1
+  → Cloud Run service hackspace-frontend
+  → nginx proxies /api to hackspace-backend
 ```
 
 | Environment | Entry |
 |-------------|--------|
-| Local | `uvicorn app.main:app --reload` on **8000**; `.env` |
-| Container / Cloud Run | Dockerfile uvicorn **0.0.0.0:8080**; secrets from Secret Manager |
+| Local API | `uvicorn app.main:app --reload` on **8000**, from `hackspace-backend/` |
+| Local SPA | Vite on **127.0.0.1:5173**, proxying to port 8000 |
+| Cloud Run | Both services in **asia-south1**. The browser talks only to the frontend host. |
 
-Production substitutions and multi-project (staging vs prod) triggers: [README — Production](../README.md#production-cross-origin-frontend) and [Multi-environment deploy](../README.md#multi-environment-deploy-staging--production).
+Deploy steps, secrets, and triggers: [deployment.md](deployment.md).
 
 ---
 
@@ -530,20 +536,20 @@ app/
 │   ├── email_service.py
 │   └── …
 └── utils/                  # IST, GCS, OTP, seeder, CORS, cookies
-docs/
-└── architecture.md         # this file
 tests/                      # pytest characterization + feature tests
 cloudbuild.yaml
 Dockerfile
 ```
+
+Repository docs live in `/docs` (this file is `docs/architecture.md`).
 
 ---
 
 ## 15. What this is not
 
 - The old prototype paths `/upload-video`, `/analyze-video`, and `evaluation_sessions` are **not** the product. Live evaluation is **hackathon submissions**.
-- `CLAUDE.md` may still describe that prototype; prefer this document and `app/main.py`.
+- The root `CLAUDE.md` is agent guidance. Prefer this document and `hackspace-backend/app/main.py`.
 - No in-app notification inbox — email is OTP and leaderboard publish.
 - In-process `BackgroundTasks` (local video AI, GitHub AI) are lost on Cloud Run instance restart.
 
-For endpoint-level frontend contracts, see the README “Frontend handoff” sections (rounds/teams, GitHub AI, leaderboard, drafts, export, CSRF).
+For endpoint-level frontend contracts, see the “Frontend handoff” sections in [backend.md](backend.md).

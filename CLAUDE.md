@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Backend commands below run from `hackspace-backend/`. The app is `hackspace-frontend/`. Design docs are in `docs/`.
+
 ## Overview
 
 hackspace-backend is a FastAPI service whose core feature is **AI-assisted video evaluation**: a participant uploads their hackathon submission video, and the backend uses Vertex AI **Gemini** (multimodal) to watch the video and produce a structured evaluation (per-criterion scores, strengths, improvements, and an overall verdict). Videos are stored in Google Cloud Storage and session metadata in Firestore. Firebase provides authentication and the Firestore database.
@@ -31,7 +33,7 @@ docker-compose up                 # production-style service on :8000
 docker-compose --profile dev up   # hot-reload dev service
 ```
 
-Note: `pytest`/`pytest-asyncio` are configured as dev dependencies but there is no `tests/` directory yet.
+Tests live in `hackspace-backend/tests/`.
 
 ## Architecture
 
