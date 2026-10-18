@@ -140,19 +140,19 @@ def test_retired_bootstrap_admin_is_removed_from_auth_and_firestore():
     firebase.auth_users["old-admin"] = {
         "uid": "old-admin",
         "user_id": "old-admin",
-        "email": "admin@nxtwave.co.in",
+        "email": "admin@hackspace.in",
     }
     firebase.set_document(
         "users",
         "old-admin",
-        {"email": "admin@nxtwave.co.in", "role": "admin", "name": "Debasis Mohanty"},
+        {"email": "admin@hackspace.in", "role": "admin", "name": "Debasis Mohanty"},
     )
     firebase.set_document(
         "users",
         "kept-admin",
         {"email": "desk@hackspace.in", "role": "admin", "name": "Desk Admin"},
     )
-    DatabaseSeeder(firebase=firebase)._remove_retired_bootstrap_user("admin@nxtwave.co.in")
+    DatabaseSeeder(firebase=firebase)._remove_retired_bootstrap_user("admin@hackspace.in")
     assert firebase.get_document("users", "old-admin") is None
     assert "old-admin" not in firebase.auth_users
     assert firebase.get_document("users", "kept-admin")["email"] == "desk@hackspace.in"

@@ -953,7 +953,7 @@ export default function DropLandingPage() {
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   return (
-    <div className="chz" ref={rootRef}>
+    <div className="landing" ref={rootRef}>
       <a href="#main" className="hz-skip">
         Skip to content
       </a>

@@ -92,8 +92,8 @@ def test_evaluator_start_accepts_email_or_mobile_independently():
             mobile_number="+919876543210",
         )
 
-    email_only = RegisterStartRequest(role="evaluator", email="ada@nxtwave.co.in")
-    assert email_only.email == "ada@nxtwave.co.in"
+    email_only = RegisterStartRequest(role="evaluator", email="ada@hackspace.in")
+    assert email_only.email == "ada@hackspace.in"
 
     phone_only = RegisterStartRequest(
         role="evaluator", mobile_number="+919876543210"
@@ -105,19 +105,19 @@ def test_evaluator_merge_session_adds_second_identifier():
     now = datetime(2026, 8, 18, 12, 0, tzinfo=IST)
     service, firebase, _ = _service(now)
     session_id = service.start(
-        RegisterStartRequest(role="evaluator", email="ada@nxtwave.co.in")
+        RegisterStartRequest(role="evaluator", email="ada@hackspace.in")
     )
     merged = service.start(
         RegisterStartRequest(
             session_id=session_id,
             role="evaluator",
-            email="ada@nxtwave.co.in",
+            email="ada@hackspace.in",
             mobile_number="+919876543210",
         )
     )
     assert merged == session_id
     doc = firebase.get_document("verification_sessions", session_id)
-    assert doc["email"] == "ada@nxtwave.co.in"
+    assert doc["email"] == "ada@hackspace.in"
     assert doc["phone"] == "+919876543210"
     assert doc["role"] == "evaluator"
 
@@ -128,7 +128,7 @@ def test_evaluator_complete_happy_path():
     session_id = service.start(
         RegisterStartRequest(
             role="evaluator",
-            email="ada@nxtwave.co.in",
+            email="ada@hackspace.in",
             mobile_number="+919876543210",
         )
     )
@@ -136,7 +136,7 @@ def test_evaluator_complete_happy_path():
     assert doc["role"] == "evaluator"
 
     service.send_email_otp(
-        EmailSendOtpRequest(session_id=session_id, email="ada@nxtwave.co.in")
+        EmailSendOtpRequest(session_id=session_id, email="ada@hackspace.in")
     )
     service.verify_email_otp(
         EmailVerifyOtpRequest(session_id=session_id, code="123456")
@@ -155,7 +155,7 @@ def test_evaluator_complete_happy_path():
             first_name="Ada",
             last_name="Lovelace",
             employee_id="E123",
-            email="ada@nxtwave.co.in",
+            email="ada@hackspace.in",
             mobile_number="+919876543210",
             password="secret12",
         )
@@ -177,7 +177,7 @@ def test_student_complete_rejects_evaluator_session():
     session_id = service.start(
         RegisterStartRequest(
             role="evaluator",
-            email="ada@nxtwave.co.in",
+            email="ada@hackspace.in",
             mobile_number="+919876543210",
         )
     )
@@ -194,7 +194,7 @@ def test_student_complete_rejects_evaluator_session():
                 session_id=session_id,
                 first_name="Ada",
                 last_name="Lovelace",
-                email="ada@nxtwave.co.in",
+                email="ada@hackspace.in",
                 university_id="uni-niat",
                 batch_id="batch-2024",
                 university_name="NIAT",
@@ -212,7 +212,7 @@ def test_evaluator_complete_rejects_unverified():
     session_id = service.start(
         RegisterStartRequest(
             role="evaluator",
-            email="ada@nxtwave.co.in",
+            email="ada@hackspace.in",
             mobile_number="+919876543210",
         )
     )
@@ -223,7 +223,7 @@ def test_evaluator_complete_rejects_unverified():
                 first_name="Ada",
                 last_name="Lovelace",
                 employee_id="E123",
-                email="ada@nxtwave.co.in",
+                email="ada@hackspace.in",
                 mobile_number="+919876543210",
                 password="secret12",
             )
@@ -237,12 +237,12 @@ def test_evaluator_complete_rejects_duplicate_employee_id():
     firebase.set_document(
         "users",
         "existing",
-        {"employee_id": "E123", "email": "other@nxtwave.co.in"},
+        {"employee_id": "E123", "email": "other@hackspace.in"},
     )
     session_id = service.start(
         RegisterStartRequest(
             role="evaluator",
-            email="ada@nxtwave.co.in",
+            email="ada@hackspace.in",
             mobile_number="+919876543210",
         )
     )
@@ -258,7 +258,7 @@ def test_evaluator_complete_rejects_duplicate_employee_id():
                 first_name="Ada",
                 last_name="Lovelace",
                 employee_id="E123",
-                email="ada@nxtwave.co.in",
+                email="ada@hackspace.in",
                 mobile_number="+919876543210",
                 password="secret12",
             )

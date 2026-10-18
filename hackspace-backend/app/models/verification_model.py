@@ -8,7 +8,7 @@ from typing import Literal
 from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 
 from app.models.string_utils import strip_required
-from app.models.user_model import NXTWAVE_EMAIL_DOMAIN
+from app.models.user_model import HACKSPACE_EMAIL_DOMAIN
 from app.utils.phone import normalize_e164
 
 RegistrationRole = Literal["student", "evaluator"]
@@ -26,10 +26,10 @@ def validate_password_strength(password: str) -> str:
     return password
 
 
-def validate_nxtwave_email(email: str) -> str:
+def validate_hackspace_email(email: str) -> str:
     normalized = email.lower()
-    if not normalized.endswith(NXTWAVE_EMAIL_DOMAIN):
-        raise ValueError(f"Evaluator email must be a Nxtwave address ({NXTWAVE_EMAIL_DOMAIN})")
+    if not normalized.endswith(HACKSPACE_EMAIL_DOMAIN):
+        raise ValueError(f"Evaluator email must be a Hackspace address ({HACKSPACE_EMAIL_DOMAIN})")
     return normalized
 
 
@@ -65,7 +65,7 @@ class RegisterStartRequest(BaseModel):
         if not self.email and not self.mobile_number:
             raise ValueError("At least one of email or mobile_number is required")
         if self.role == "evaluator" and self.email:
-            validate_nxtwave_email(str(self.email))
+            validate_hackspace_email(str(self.email))
         return self
 
 
@@ -233,7 +233,7 @@ class EvaluatorRegisterCompleteRequest(BaseModel):
     @field_validator("email", mode="before")
     @classmethod
     def normalize_email(cls, value: str) -> str:
-        return validate_nxtwave_email(strip_required(value))
+        return validate_hackspace_email(strip_required(value))
 
     @field_validator("mobile_number")
     @classmethod

@@ -34,7 +34,7 @@ from app.models.verification_model import (
     StaffProfileStartRequest,
     RegisterStartRequest,
     VerifyPhoneTokenRequest,
-    validate_nxtwave_email,
+    validate_hackspace_email,
 )
 from app.services.email_service import EmailService, get_email_service
 from app.services.firebase import FirebaseService
@@ -300,7 +300,7 @@ class VerificationService:
                 code="EMAIL_MISMATCH",
             )
         if str(session.get("role") or "student") == "evaluator":
-            validate_nxtwave_email(request.email)
+            validate_hackspace_email(request.email)
         if session.get("email_verified"):
             raise BadRequestError("Email is already verified", code="ALREADY_VERIFIED")
 

@@ -170,19 +170,19 @@ def test_admin_gets_three_member_team_roster(service: SubmissionService, admin_u
                     {
                         "user_id": "u-001",
                         "name": "Bhargava Rama Bharadwaj Alapati",
-                        "email": "alapati@nxtwave.co.in",
+                        "email": "alapati@hackspace.in",
                         "role": "leader",
                     },
                     {
                         "user_id": "u-002",
                         "name": "Bharathi G",
-                        "email": "bharathi.g@nxtwave.co.in",
+                        "email": "bharathi.g@hackspace.in",
                         "role": "member",
                     },
                     {
                         "user_id": "u-003",
                         "name": "Member Three",
-                        "email": "three@nxtwave.co.in",
+                        "email": "three@hackspace.in",
                         "role": "member",
                     },
                 ],

@@ -131,7 +131,7 @@ def test_sync_creates_spreadsheet_and_persists_metadata():
 
     result = svc.sync_hackathon_submissions(
         "hack-1",
-        admin_email="admin@nxtwave.co.in",
+        admin_email="admin@hackspace.in",
     )
 
     assert export_service.calls == ["hack-1"]
@@ -170,7 +170,7 @@ def test_sync_reuses_existing_spreadsheet_and_adds_missing_tabs():
 
     result = svc.sync_hackathon_submissions(
         "hack-1",
-        admin_email="admin@nxtwave.co.in",
+        admin_email="admin@hackspace.in",
     )
 
     drive_calls["create_execute"].assert_not_called()
@@ -206,7 +206,7 @@ def test_sync_links_existing_spreadsheet_when_create_not_possible():
 
     result = svc.sync_hackathon_submissions(
         "hack-1",
-        admin_email="admin@nxtwave.co.in",
+        admin_email="admin@hackspace.in",
         spreadsheet_id="manual-sheet-id",
     )
 
@@ -226,7 +226,7 @@ def test_missing_folder_env_raises_clear_error(monkeypatch):
         drive_client_factory=lambda: drive_api,
     )
     with pytest.raises(InfrastructureError) as exc:
-        svc.sync_hackathon_submissions("hack-1", admin_email="admin@nxtwave.co.in")
+        svc.sync_hackathon_submissions("hack-1", admin_email="admin@hackspace.in")
     assert exc.value.code == "SHEETS_FOLDER_NOT_CONFIGURED"
 
 

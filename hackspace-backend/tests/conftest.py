@@ -17,7 +17,7 @@ from app.models.user_model import CurrentUser
 def admin_user() -> CurrentUser:
     return CurrentUser(
         user_id="admin-1",
-        email="admin@nxtwave.co.in",
+        email="admin@hackspace.in",
         role="admin",
         name="Admin",
         approval_status="approved",
@@ -39,7 +39,7 @@ def student_user() -> CurrentUser:
 def evaluator_user() -> CurrentUser:
     return CurrentUser(
         user_id="evaluator-1",
-        email="evaluator@nxtwave.co.in",
+        email="evaluator@hackspace.in",
         role="evaluator",
         name="Evaluator One",
         approval_status="approved",
@@ -50,7 +50,7 @@ def evaluator_user() -> CurrentUser:
 def pending_evaluator_user() -> CurrentUser:
     return CurrentUser(
         user_id="evaluator-pending",
-        email="pending@nxtwave.co.in",
+        email="pending@hackspace.in",
         role="evaluator",
         name="Pending Evaluator",
         approval_status="pending",

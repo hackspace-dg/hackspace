@@ -50,7 +50,7 @@ def test_delete_student_removes_profile_auth_and_team_seat():
     firebase.set_document(
         "users",
         "student-1",
-        {"role": "student", "email": "sanjay@nxtwave.co.in", "name": "Sanjay Chepuri"},
+        {"role": "student", "email": "sanjay@hackspace.in", "name": "Sanjay Chepuri"},
     )
     firebase.set_document(
         "hackathon_enrollments",
@@ -87,7 +87,7 @@ def test_delete_student_removes_profile_auth_and_team_seat():
 
 def test_delete_student_removes_an_empty_team():
     firebase = FakeFirebase()
-    firebase.set_document("users", "student-1", {"role": "student", "email": "solo@nxtwave.co.in"})
+    firebase.set_document("users", "student-1", {"role": "student", "email": "solo@hackspace.in"})
     firebase.set_document(
         "hackathon_teams",
         "team-1",
@@ -101,7 +101,7 @@ def test_delete_student_removes_an_empty_team():
 
 def test_delete_student_rejects_other_roles_and_missing_users():
     firebase = FakeFirebase()
-    firebase.set_document("users", "admin-1", {"role": "admin", "email": "admin@nxtwave.co.in"})
+    firebase.set_document("users", "admin-1", {"role": "admin", "email": "admin@hackspace.in"})
     service = UserService(firebase=firebase)
     with pytest.raises(ConflictError) as exc:
         service.delete_student_account("admin-1")
@@ -119,7 +119,7 @@ def test_delete_evaluator_removes_profile_auth_and_assignments():
         "eval-1",
         {
             "role": "evaluator",
-            "email": "debasis.nayak@nxtwave.co.in",
+            "email": "debasis.nayak@hackspace.in",
             "name": "Debashis Nayak",
             "employee_id": "NW0003800",
             "approval_status": "approved",
@@ -149,7 +149,7 @@ def test_delete_evaluator_removes_profile_auth_and_assignments():
 
 def test_delete_evaluator_rejects_a_student():
     firebase = FakeFirebase()
-    firebase.set_document("users", "student-1", {"role": "student", "email": "s@nxtwave.co.in"})
+    firebase.set_document("users", "student-1", {"role": "student", "email": "s@hackspace.in"})
     service = UserService(firebase=firebase)
     with pytest.raises(ConflictError) as exc:
         service.delete_evaluator_account("student-1")

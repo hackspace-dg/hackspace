@@ -17,7 +17,7 @@ ApprovalStatus = Literal["pending", "approved"]
 USER_ROLES: tuple[UserRole, ...] = ("super_admin", "admin", "evaluator", "student", "custom")
 # Roles a person can pick on the public register screen.
 REGISTRATION_ROLES: tuple[str, ...] = ("evaluator", "student")
-NXTWAVE_EMAIL_DOMAIN = "@nxtwave.co.in"
+HACKSPACE_EMAIL_DOMAIN = "@hackspace.in"
 
 
 class VerificationDue(BaseModel):
@@ -161,9 +161,9 @@ class EvaluatorRegisterRequest(BaseModel):
 
     @field_validator("email")
     @classmethod
-    def validate_nxtwave_email(cls, value: str) -> str:
-        if not value.lower().endswith(NXTWAVE_EMAIL_DOMAIN):
-            raise ValueError(f"Evaluator email must be a Nxtwave address ({NXTWAVE_EMAIL_DOMAIN})")
+    def validate_hackspace_email(cls, value: str) -> str:
+        if not value.lower().endswith(HACKSPACE_EMAIL_DOMAIN):
+            raise ValueError(f"Evaluator email must be a Hackspace address ({HACKSPACE_EMAIL_DOMAIN})")
         return value.lower()
 
     @model_validator(mode="after")

@@ -14,7 +14,7 @@ def _evaluator_request(**overrides):
         "first_name": "Debashis",
         "last_name": "Nayak",
         "employee_id": "NW0003800",
-        "email": "debashis.nayak@nxtwave.co.in",
+        "email": "debashis.nayak@hackspace.in",
         "password": "secret12",
         "confirm_password": "secret12",
         **overrides,
@@ -28,7 +28,7 @@ def test_register_evaluator_reclaims_orphan_auth_user():
     user_service.user_exists.return_value = False
     user_service.find_by_field.return_value = None
     firebase.get_user_by_email.return_value = SimpleNamespace(uid="orphan-uid")
-    firebase.create_user.return_value = {"user_id": "new-uid", "email": "debashis.nayak@nxtwave.co.in"}
+    firebase.create_user.return_value = {"user_id": "new-uid", "email": "debashis.nayak@hackspace.in"}
 
     service = RegistrationService(firebase=firebase, user_service=user_service)
     result = service.register_evaluator(_evaluator_request())

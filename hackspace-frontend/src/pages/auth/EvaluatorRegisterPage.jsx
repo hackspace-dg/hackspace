@@ -19,7 +19,7 @@ export default function EvaluatorRegisterPage() {
           </Link>
           <h1>Evaluator registration</h1>
           <p className="text-muted">
-            Verify your Nxtwave email and mobile number to create an evaluator account. An
+            Verify your Hackspace email and mobile number to create an evaluator account. An
             administrator must approve it before you can sign in.
           </p>
         </div>

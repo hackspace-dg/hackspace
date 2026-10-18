@@ -4,14 +4,14 @@
  * Unlayered on purpose: everything else sits in cascade layers
  * (theme, base, legacy, components, utilities), so these rules win without
  * !important. Every class carries an `hz-` prefix and every element rule is
- * scoped to `.chz`, so nothing here reaches another page even after this
+ * scoped to `.landing`, so nothing here reaches another page even after this
  * chunk has loaded.
  *
- * Light tokens live on `.chz`; the dark set follows the app's own theme
+ * Light tokens live on `.landing`; the dark set follows the app's own theme
  * switch on `html[data-theme]`. The dark bands (statement, organizers,
  * footer) use their own `--f*` tokens so their contrast never depends on it.
  */
-.chz {
+.landing {
   --bg: #f4f6f6; --surface: #ffffff; --surface-2: #e9ecec;
   --ink: #0b0d0c; --muted: #656e6b; --line: #dde1e1;
   --lime: #ccff00; --lime-deep: #a9d800; --on-lime: #0b0d0c;
@@ -40,7 +40,7 @@
   overflow-x: clip;
   min-height: 100vh;
 }
-html[data-theme='dark'] .chz {
+html[data-theme='dark'] .landing {
   --bg: #0a0b0b; --surface: #121514; --surface-2: #1a1e1c;
   --ink: #f1f4f2; --muted: #8c9693; --line: #232725; --glow: rgba(204, 255, 0, 0.28);
   --mark-tile: #ccff00; --mark-art: #0b0d0c;
@@ -54,20 +54,20 @@ html[data-theme='dark'] .chz {
   color-scheme: dark;
 }
 
-.chz *, .chz *::before, .chz *::after { box-sizing: border-box; }
-.chz h1, .chz h2, .chz h3, .chz h4 {
+.landing *, .landing *::before, .landing *::after { box-sizing: border-box; }
+.landing h1, .landing h2, .landing h3, .landing h4 {
   font-family: var(--display); font-weight: 700; letter-spacing: -0.035em;
   text-wrap: balance; margin: 0; color: inherit;
 }
 /* Resets sit at zero specificity (:where) so any `hz-` class that sets its
-   own colour or margin wins — a plain `.chz a { color: inherit }` outranked
+   own colour or margin wins — a plain `.landing a { color: inherit }` outranked
    `.hz-btn-primary` and turned its label white on lime in the dark theme. */
-:where(.chz) p { margin: 0; }
-:where(.chz) a { color: inherit; text-decoration: none; }
-:where(.chz) button { font: inherit; }
-.chz :focus-visible { outline: 2px solid var(--lime-deep); outline-offset: 3px; border-radius: 6px; }
-.chz section { padding-block: clamp(56px, 8vw, 104px); }
-.chz h2 { font-size: clamp(30px, 5vw, 52px); line-height: 1.03; margin-top: 16px; }
+:where(.landing) p { margin: 0; }
+:where(.landing) a { color: inherit; text-decoration: none; }
+:where(.landing) button { font: inherit; }
+.landing :focus-visible { outline: 2px solid var(--lime-deep); outline-offset: 3px; border-radius: 6px; }
+.landing section { padding-block: clamp(56px, 8vw, 104px); }
+.landing h2 { font-size: clamp(30px, 5vw, 52px); line-height: 1.03; margin-top: 16px; }
 
 .hz-skip {
   position: absolute; top: 12px; left: 20px; z-index: 70; transform: translateY(-200%);
@@ -116,12 +116,12 @@ html[data-theme='dark'] .chz {
   position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--lime);
   z-index: 60; box-shadow: 0 0 14px var(--glow);
 }
-.chz .hz-header {
+.landing .hz-header {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
   background: color-mix(in srgb, var(--bg) 84%, transparent); backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent; transition: border-color 0.35s var(--ease);
 }
-.chz .hz-header.is-stuck { border-bottom-color: var(--line); }
+.landing .hz-header.is-stuck { border-bottom-color: var(--line); }
 .hz-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 15px; }
 .hz-navlinks { display: flex; align-items: center; gap: 26px; font-size: 15px; color: var(--muted); }
 .hz-navlinks a { position: relative; padding-block: 3px; transition: color 0.25s; }
@@ -161,7 +161,7 @@ html[data-theme='dark'] .chz {
 .hz-btn:hover .hz-arr { transform: translateX(5px); }
 
 /* ---------- hero ---------- */
-.chz .hz-hero {
+.landing .hz-hero {
   padding-block: clamp(52px, 8vw, 96px) clamp(44px, 6vw, 80px);
   position: relative; overflow: hidden; isolation: isolate;
 }
@@ -188,7 +188,7 @@ html[data-theme='dark'] .chz {
 }
 .hz-badge.is-muted .hz-dot { animation: none; }
 @keyframes hz-blink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.25; } }
-.chz h1 { font-size: clamp(44px, 8vw, 88px); line-height: 0.97; margin-top: 24px; }
+.landing h1 { font-size: clamp(44px, 8vw, 88px); line-height: 0.97; margin-top: 24px; }
 .hz-sr {
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
 }
@@ -377,7 +377,7 @@ html[data-theme='dark'] .chz {
 .hz-seeall:hover .hz-arr { transform: translateX(5px); }
 
 /* ---------- statement ---------- */
-.chz .hz-statement { background: var(--fbg); color: var(--ftext); text-align: center; position: relative; overflow: hidden; }
+.landing .hz-statement { background: var(--fbg); color: var(--ftext); text-align: center; position: relative; overflow: hidden; }
 .hz-statement::before {
   content: ''; position: absolute; width: 700px; height: 700px; left: 50%; top: 50%; translate: -50% -50%; z-index: 0;
   background: radial-gradient(circle, rgba(204, 255, 0, 0.16), transparent 66%); filter: blur(24px);
@@ -385,7 +385,7 @@ html[data-theme='dark'] .chz {
 }
 @keyframes hz-float { to { transform: translate3d(8%, -8%, 0) scale(1.25); } }
 .hz-statement .hz-wrap { position: relative; z-index: 1; }
-.chz .hz-statement h2 { font-size: clamp(32px, 6.4vw, 66px); max-width: 16ch; margin-inline: auto; }
+.landing .hz-statement h2 { font-size: clamp(32px, 6.4vw, 66px); max-width: 16ch; margin-inline: auto; }
 .hz-statement p { color: var(--fmuted); margin-top: 20px; font-size: clamp(16px, 2.2vw, 19px); }
 .hz-wordcycle { display: inline-block; min-width: 4.4ch; text-align: left; color: var(--lime); transition: opacity 0.3s; }
 
@@ -415,7 +415,7 @@ html[data-theme='dark'] .chz {
 .hz-meta span:first-child { color: var(--muted); }
 .hz-meta .hz-missing { color: var(--bad); }
 .hz-rhead { padding: 20px 20px 0; }
-.chz .hz-rhead h3 { font-family: var(--mono); font-size: 16px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.landing .hz-rhead h3 { font-family: var(--mono); font-size: 16px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .hz-tally { font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin-top: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
 .hz-tally b { font-weight: 500; }
 .hz-items { padding: 14px; display: flex; flex-direction: column; gap: 10px; position: relative; list-style: none; margin: 0; }
@@ -473,7 +473,7 @@ html[data-theme='dark'] .chz {
 }
 .hz-step.is-in .hz-num { background: var(--lime); color: var(--on-lime); border-color: var(--lime-deep); }
 .hz-step:hover .hz-num { transform: translateY(-4px) rotate(-6deg); }
-.chz .hz-step h3 { font-size: 20px; margin-top: 20px; }
+.landing .hz-step h3 { font-size: 20px; margin-top: 20px; }
 .hz-step p { color: var(--muted); margin-top: 10px; font-size: 15.5px; }
 .hz-stats {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; margin-top: clamp(48px, 7vw, 80px);
@@ -487,10 +487,10 @@ html[data-theme='dark'] .chz {
 .hz-stat span { color: var(--muted); font-size: 14.5px; display: block; margin-top: 9px; }
 
 /* ---------- organizers ---------- */
-.chz .hz-org { background: var(--fbg); color: var(--ftext); }
+.landing .hz-org { background: var(--fbg); color: var(--ftext); }
 .hz-org-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
 @media (max-width: 860px) { .hz-org-grid { grid-template-columns: 1fr; gap: 30px; } }
-.chz .hz-org h2 { color: var(--ftext); }
+.landing .hz-org h2 { color: var(--ftext); }
 .hz-org p { color: var(--fmuted); margin-top: 16px; max-width: 48ch; }
 .hz-orglist { display: flex; flex-direction: column; gap: 12px; margin-top: 26px; }
 .hz-orgrow { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 13.5px; color: var(--fmuted); }
@@ -501,7 +501,7 @@ html[data-theme='dark'] .chz {
 .hz-org .hz-btn-light { margin-top: 26px; }
 
 /* ---------- cta band ---------- */
-.chz .hz-cta { background: var(--lime); color: var(--on-lime); text-align: center; position: relative; overflow: hidden; }
+.landing .hz-cta { background: var(--lime); color: var(--on-lime); text-align: center; position: relative; overflow: hidden; }
 .hz-cta::before {
   content: ''; position: absolute; inset: 0 -40px 0 0;
   background: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.045) 0 2px, transparent 2px 18px);
@@ -509,7 +509,7 @@ html[data-theme='dark'] .chz {
 }
 @keyframes hz-stripes { to { transform: translateX(-34px); } }
 .hz-cta .hz-wrap { position: relative; }
-.chz .hz-cta h2 { font-size: clamp(30px, 5.6vw, 58px); }
+.landing .hz-cta h2 { font-size: clamp(30px, 5.6vw, 58px); }
 .hz-cta p { margin-top: 14px; color: rgba(11, 13, 12, 0.68); }
 
 /* ---------- footer ---------- */
@@ -542,7 +542,7 @@ html[data-theme='dark'] .chz {
 }
 .hz-pill b { color: var(--ftext); font-weight: 500; font-variant-numeric: tabular-nums; }
 .hz-alerts { background: var(--fsurface); border: 1px solid var(--fline); border-radius: 20px; padding: 24px; min-width: 0; }
-.chz .hz-alerts h3 { font-size: 19px; color: var(--ftext); }
+.landing .hz-alerts h3 { font-size: 19px; color: var(--ftext); }
 .hz-alerts > p { color: var(--fmuted); font-size: 14.5px; margin-top: 8px; }
 .hz-field { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 .hz-field input {
@@ -564,7 +564,7 @@ html[data-theme='dark'] .chz {
 .hz-fcols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; padding-bottom: clamp(34px, 5vw, 54px); }
 @media (max-width: 860px) { .hz-fcols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 20px; } }
 .hz-fcol { min-width: 0; }
-.chz .hz-fcol h4 {
+.landing .hz-fcol h4 {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fmuted);
   font-weight: 400; margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--fline); position: relative;
 }
@@ -627,7 +627,7 @@ html[data-theme='dark'] .chz {
 .hz-totop:hover .hz-up { transform: translateY(-3px); }
 
 @media (prefers-reduced-motion: reduce) {
-  .chz *, .chz *::before, .chz *::after {
+  .landing *, .landing *::before, .landing *::after {
     animation-duration: 0.001s !important; animation-iteration-count: 1 !important; transition-duration: 0.001s !important;
   }
   .hz-rv { opacity: 1; transform: none; }

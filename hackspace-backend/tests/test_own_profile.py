@@ -65,11 +65,11 @@ def test_profile_updates_name_and_leaves_email_and_mobile():
     )
     service = UserService(firebase=firebase)
 
-    updated = service.update_own_profile("sa", "Hackspace", "Owner", "CHZ-2")
+    updated = service.update_own_profile("sa", "Hackspace", "Owner", "HS-2")
     assert updated["name"] == "Hackspace Owner"
     assert updated["email"] == "superadmin@hackspace.in"
     assert updated["mobile_no"] == "9000000000"
-    assert updated["employee_id"] == "CHZ-2"
+    assert updated["employee_id"] == "HS-2"
     assert firebase.display_names["sa"] == "Hackspace Owner"
 
     student = service.update_own_profile("student-1", "Asha", "Nair")
@@ -84,7 +84,7 @@ def test_employee_id_must_stay_unique():
     firebase.set_document(
         "users",
         "sa",
-        {"role": "super_admin", "email": "a@hackspace.in", "employee_id": "CHZ-1"},
+        {"role": "super_admin", "email": "a@hackspace.in", "employee_id": "HS-1"},
     )
     firebase.set_document(
         "users",

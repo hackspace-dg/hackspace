@@ -91,14 +91,14 @@ def test_reset_database_wipes_collections_and_keeps_only_super_admin(monkeypatch
     # Auth has Firestore users PLUS an orphan from a previous incomplete wipe.
     firebase.list_auth_users.return_value = [
         {"uid": "super-1", "email": "superadmin@hackspace.in"},
-        {"uid": "admin-1", "email": "admin@nxtwave.co.in"},
+        {"uid": "admin-1", "email": "admin@hackspace.in"},
         {"uid": "student-1", "email": "student@example.com"},
         {"uid": "eval-1", "email": "eval@example.com"},
-        {"uid": "orphan-auth-1", "email": "debashis.nayak@nxtwave.co.in"},
+        {"uid": "orphan-auth-1", "email": "debashis.nayak@hackspace.in"},
     ]
     firebase.delete_user.return_value = True
     monkeypatch.setenv(
-        "EVALUATION_BUCKET_NAME", "nxt-acad-hackathon-hackathon-evaluations"
+        "EVALUATION_BUCKET_NAME", "hackspace-evaluations"
     )
 
     with patch(
@@ -111,7 +111,7 @@ def test_reset_database_wipes_collections_and_keeps_only_super_admin(monkeypatch
             confirm_phrase="RESET",
         )
     wipe_gcs.assert_called_once_with(
-        storage_client, "nxt-acad-hackathon-hackathon-evaluations"
+        storage_client, "hackspace-evaluations"
     )
     assert result["deleted_counts"]["gcs_evaluation_bucket"] == 7
 

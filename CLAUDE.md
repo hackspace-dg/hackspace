@@ -8,7 +8,7 @@ Backend commands below run from `hackspace-backend/`. The app is `hackspace-fron
 
 hackspace-backend is a FastAPI service whose core feature is **AI-assisted video evaluation**: a participant uploads their hackathon submission video, and the backend uses Vertex AI **Gemini** (multimodal) to watch the video and produce a structured evaluation (per-criterion scores, strengths, improvements, and an overall verdict). Videos are stored in Google Cloud Storage and session metadata in Firestore. Firebase provides authentication and the Firestore database.
 
-The **login / authentication system is reused verbatim** from the NxtCreate backend: Firebase Auth via the Identity Toolkit REST API for login, `id_token` verification for protected routes, Firestore-backed roles, and a startup seeder.
+Login uses Firebase Auth through the Identity Toolkit REST API, then verifies the ID token on protected routes. Roles live on the Firestore user document, and a startup seeder creates the first super admin.
 
 ## Commands
 

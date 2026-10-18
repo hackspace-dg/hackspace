@@ -8,8 +8,8 @@ export function isEmail(value) {
  * Evaluator accounts are staff accounts, so the address must sit on the
  * corporate domain rather than merely look like an email.
  */
-export function isNxtwaveEmail(value) {
-  return /^[^\s@]+@nxtwave\.co\.in$/i.test(String(value || '').trim())
+export function isHackspaceEmail(value) {
+  return /^[^\s@]+@hackspace\.in$/i.test(String(value || '').trim())
 }
 
 export function required(value) {
@@ -127,7 +127,7 @@ export function validateEvaluatorForm(form) {
   else if (!isEmployeeId(form.employee_id)) {
     errors.employee_id = 'An employee ID is 9 characters starting with NW, like NW0003800'
   }
-  if (!isNxtwaveEmail(form.email)) errors.email = 'Use your @nxtwave.co.in email address'
+  if (!isHackspaceEmail(form.email)) errors.email = 'Use your @hackspace.in email address'
   const phone = toE164(form.country_code, form.mobile_national)
   if (!isE164(phone)) errors.mobile_national = 'Enter a valid mobile number'
   const strength = passwordStrength(form.password)

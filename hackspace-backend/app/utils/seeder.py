@@ -66,7 +66,7 @@ class SeedUser(TypedDict):
 # is updated once, then left alone on later startups.
 SUPER_ADMIN_PASSWORD_REVISION = "2"
 # Removed from the seed. Startup deletes this account if a previous seed left it.
-RETIRED_BOOTSTRAP_EMAILS = ("admin@nxtwave.co.in",)
+RETIRED_BOOTSTRAP_EMAILS = ()
 DEFAULT_SEED_USERS: list[SeedUser] = [
     {
         "email": "superadmin@hackspace.in",

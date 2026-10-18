@@ -54,7 +54,7 @@ def test_evaluator_register_strips_names():
         first_name="  Ada  ",
         last_name="  Lovelace ",
         employee_id=" E1 ",
-        email="ada@nxtwave.co.in",
+        email="ada@hackspace.in",
         password="secret1",
         confirm_password="secret1",
     )

@@ -77,7 +77,3 @@ From `hackspace-frontend/`:
 npm run lint
 npm run build
 ```
-
-## License
-
-[MIT](LICENSE)

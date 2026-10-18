@@ -63,7 +63,7 @@ def test_get_admin_user_allows_custom_role_on_matching_path():
 def test_overview_permission_can_read_dashboard_lists():
     manager = CurrentUser(
         user_id="custom-1",
-        email="sanjaya@nxtwave.co.in",
+        email="sanjaya@hackspace.in",
         role="custom",
         name="Sanjaya Chepuri",
         permissions=["overview"],

@@ -15,7 +15,7 @@ import { useRegistrationConfig } from '../../hooks/useRegistrationConfig'
 import { VERIFY, useRegistrationVerification } from '../../hooks/useRegistrationVerification'
 import { RECAPTCHA_CONTAINER_ID } from '../../lib/firebasePhone'
 import { ROLES } from '../../utils/constants'
-import { isEmployeeId, isNxtwaveEmail, validateEvaluatorForm } from '../../utils/validators'
+import { isEmployeeId, isHackspaceEmail, validateEvaluatorForm } from '../../utils/validators'
 import { trackEvent } from '../../lib/logrocket'
 
 /** An employee ID is exactly this long, so the field stops accepting more. */
@@ -79,8 +79,8 @@ function EvaluatorRegisterFormBody({ onSuccess, emailRequired, phoneRequired }) 
     countryCode: form.country_code,
     mobileNational: form.mobile_national,
     onFieldError: (field, message) => setErrors((prev) => ({ ...prev, [field]: message })),
-    isEmailValid: isNxtwaveEmail,
-    invalidEmailMessage: 'Use your @nxtwave.co.in email address',
+    isEmailValid: isHackspaceEmail,
+    invalidEmailMessage: 'Use your @hackspace.in email address',
   })
 
   const fieldErrors = validateEvaluatorForm(form)
@@ -204,11 +204,11 @@ function EvaluatorRegisterFormBody({ onSuccess, emailRequired, phoneRequired }) 
 
   const emailField = (
     <Input
-      label="Nxtwave email"
+      label="Hackspace email"
       type="email"
       required
       autoComplete="email"
-      placeholder="you@nxtwave.co.in"
+      placeholder="you@hackspace.in"
       value={form.email}
       onChange={update('email')}
       error={errors.email}

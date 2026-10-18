@@ -115,7 +115,7 @@ steps:
   # Step 6: Deploy to Cloud Run, then set Cloud Tasks target URL to this revision's URL
   # Prerequisite: Secret Manager secrets must exist (see README):
   #   FIREBASE_*, INTERNAL_JOB_SECRET, SMTP_USERNAME, SMTP_PASSWORD (Brevo).
-  #   Set SMTP_USERNAME secret to noreply@mail.nxtlab.tech; SMTP_FROM via _SMTP_FROM below.
+  #   Set SMTP_USERNAME to the verified sender; SMTP_FROM via _SMTP_FROM below.
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: bash
     args:

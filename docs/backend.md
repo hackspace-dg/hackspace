@@ -30,17 +30,17 @@ uvicorn app.main:app --reload  # http://localhost:8000/docs
 | Role | Access |
 |------|--------|
 | **student** | Register team, submit video + requirement answers, view own submissions; see report/`final_score` only after admin approval |
-| **evaluator** | Must be `@nxtwave.co.in` and **approved** by admin; works only on **assigned** submissions; can run AI analysis and submit for review |
+| **evaluator** | Must be `@hackspace.in` and **approved** by admin; works only on **assigned** submissions; can run AI analysis and submit for review |
 | **admin** | Manage hackathons/themes/requirements/scoring, assign evaluators, approve evaluations, publish results |
 
 Seeded users (created on startup, password `12345678`):
 
 | Email | Role | Approval |
 |-------|------|----------|
-| `admin@nxtwave.co.in` | admin | — |
-| `evaluator@nxtwave.co.in` | evaluator | approved |
-| `evaluator.pending@nxtwave.co.in` | evaluator | pending |
-| `student@nxtwave.co.in` | student | approved |
+| `admin@hackspace.in` | admin | — |
+| `evaluator@hackspace.in` | evaluator | approved |
+| `evaluator.pending@hackspace.in` | evaluator | pending |
+| `student@hackspace.in` | student | approved |
 
 ## Authentication
 
@@ -50,7 +50,7 @@ Login sets an HttpOnly `access_token` cookie (not returned in the JSON body). Us
 curl -X POST http://localhost:8000/auth/login \
   -H "Content-Type: application/json" \
   -c cookies.txt \
-  -d '{"email":"student@nxtwave.co.in","password":"12345678"}'
+  -d '{"email":"student@hackspace.in","password":"12345678"}'
 ```
 
 - `POST /auth/logout` — clear cookie  
@@ -79,7 +79,7 @@ Errors use `{ "detail": { "code", "message" } }` (e.g. `EMAIL_TAKEN`, `INVALID_C
 
 **Evaluator** — same verified email + mobile flow as students, then profile completion. Account starts as `pending` until admin approval:
 
-1. `POST /auth/register/start` — `{ "role": "evaluator", "email" }` **or** `{ "role": "evaluator", "mobile_number" }` → `{ "session_id" }`; call again with `session_id` to attach the other identifier (same as student). When email is included it must be `@nxtwave.co.in`.
+1. `POST /auth/register/start` — `{ "role": "evaluator", "email" }` **or** `{ "role": "evaluator", "mobile_number" }` → `{ "session_id" }`; call again with `session_id` to attach the other identifier (same as student). When email is included it must be `@hackspace.in`.
 2. `POST /auth/email/send-otp` — `{ "session_id", "email" }`
 3. `POST /auth/email/verify-otp` — `{ "session_id", "code" }`
 4. Firebase Phone Auth in the browser → `POST /auth/verify-phone-token` — `{ "session_id", "firebase_id_token", "mobile_number" }`
@@ -114,7 +114,7 @@ Evaluators verify email and mobile **independently**. Start with whichever field
 let sessionId = (
   await api.post("/auth/register/start", {
     role: "evaluator",
-    email: "name@nxtwave.co.in", // OR mobile_number only on first call
+    email: "name@hackspace.in", // OR mobile_number only on first call
   })
 ).session_id;
 
@@ -123,13 +123,13 @@ sessionId = (
   await api.post("/auth/register/start", {
     role: "evaluator",
     session_id: sessionId,
-    email: "name@nxtwave.co.in",
+    email: "name@hackspace.in",
     mobile_number: "+919876543210",
   })
 ).session_id;
 ```
 
-When `email` is present it must end with `@nxtwave.co.in`. Store `session_id` (30-minute TTL).
+When `email` is present it must end with `@hackspace.in`. Store `session_id` (30-minute TTL).
 
 ### Steps 2–4 — Same as student
 
@@ -184,7 +184,7 @@ User can still call `GET /auth/me` but most app routes return `403` until `appro
 
 Single page with sections (mirror student register):
 
-1. **Account** — first name, last name, employee ID, Nxtwave email, mobile, password, confirm password
+1. **Account** — first name, last name, employee ID, Hackspace email, mobile, password, confirm password
 2. **Verify email** — Send code / 6-digit input / verified badge
 3. **Verify mobile** — Firebase phone widget / verified badge
 4. **Submit** — enabled only when both verifications succeed
@@ -305,18 +305,18 @@ Registration email codes are sent by the **backend over SMTP** (not Firebase Aut
 ### 1. Brevo dashboard
 
 1. Sign in at [brevo.com](https://www.brevo.com).
-2. **Senders & IP → Senders** — add and verify **`noreply@mail.nxtlab.tech`**. Complete domain DNS (SPF/DKIM) for `mail.nxtlab.tech` if Brevo asks — improves deliverability.
-3. **SMTP & API → SMTP** — click **Generate SMTP key** (login for SMTP is **`noreply@mail.nxtlab.tech`** when using a sender-based key).
+2. **Senders & IP → Senders** — add and verify **`noreply@hackspace.in`**. Complete domain DNS (SPF/DKIM) for `hackspace.in` if Brevo asks — improves deliverability.
+3. **SMTP & API → SMTP** — click **Generate SMTP key** (login for SMTP is **`noreply@hackspace.in`** when using a sender-based key).
 
 ### 2. Secret Manager (each GCP project: staging + production)
 
 Create **`SMTP_USERNAME`** and **`SMTP_PASSWORD`** in **both** GCP projects (staging + production):
 
 ```bash
-# Brevo SMTP login (noreply@mail.nxtlab.tech)
-echo -n 'noreply@mail.nxtlab.tech' | gcloud secrets create SMTP_USERNAME --data-file=-
+# Brevo SMTP login (noreply@hackspace.in)
+echo -n 'noreply@hackspace.in' | gcloud secrets create SMTP_USERNAME --data-file=-
 # Or add a new version if the secret already exists:
-# echo -n 'noreply@mail.nxtlab.tech' | gcloud secrets versions add SMTP_USERNAME --data-file=-
+# echo -n 'noreply@hackspace.in' | gcloud secrets versions add SMTP_USERNAME --data-file=-
 
 # Brevo SMTP key (starts with xsmtpsib-…)
 echo -n 'xsmtpsib-your-key-here' | gcloud secrets create SMTP_PASSWORD --data-file=-
@@ -333,9 +333,9 @@ Grant the Cloud Run service account access to read these secrets (same as your F
 | `EMAIL_PROVIDER` | env | `smtp` |
 | `SMTP_HOST` | substitution `_SMTP_HOST` | `smtp-relay.brevo.com` |
 | `SMTP_PORT` | substitution `_SMTP_PORT` | `587` |
-| `SMTP_FROM` | substitution `_SMTP_FROM` | `noreply@mail.nxtlab.tech` |
+| `SMTP_FROM` | substitution `_SMTP_FROM` | `noreply@hackspace.in` |
 | `SMTP_FROM_NAME` | env | `Hackspace` |
-| `SMTP_USERNAME` | Secret Manager | `noreply@mail.nxtlab.tech` |
+| `SMTP_USERNAME` | Secret Manager | `noreply@hackspace.in` |
 | `SMTP_PASSWORD` | Secret Manager | Brevo SMTP key |
 
 **Staging trigger:** override `_SMTP_FROM` if you use a different verified sender for staging (optional — same sender is fine).
@@ -351,9 +351,9 @@ ENVIRONMENT=development
 EMAIL_PROVIDER=smtp
 SMTP_HOST=smtp-relay.brevo.com
 SMTP_PORT=587
-SMTP_USERNAME=noreply@mail.nxtlab.tech
+SMTP_USERNAME=noreply@hackspace.in
 SMTP_PASSWORD=xsmtpsib-your-key
-SMTP_FROM=noreply@mail.nxtlab.tech
+SMTP_FROM=noreply@hackspace.in
 SMTP_FROM_NAME=Drop
 ```
 
@@ -366,8 +366,8 @@ If you prefer the extension instead of direct SMTP, set `EMAIL_PROVIDER=firestor
 | Extension setting | Value |
 |-------------------|--------|
 | Mail collection | `mail` |
-| SMTP connection URI | `smtps://noreply@mail.nxtlab.tech:xsmtpsib-key@smtp-relay.brevo.com:587` |
-| Default FROM | `noreply@mail.nxtlab.tech` |
+| SMTP connection URI | `smtps://noreply@hackspace.in:xsmtpsib-key@smtp-relay.brevo.com:587` |
+| Default FROM | `noreply@hackspace.in` |
 
 The backend then writes to Firestore `mail` and the extension sends via Brevo. **Recommended path is direct SMTP** (section 1–3) — fewer moving parts.
 
@@ -398,7 +398,7 @@ The backend then writes to Firestore `mail` and the extension sends via Brevo. *
 
 1. **Deploy this backend** (Cloud Build already sets `OTP_MAX_SENDS_PER_IP_PER_HOUR=2000`).
 2. **Brevo plan** — open [Brevo pricing / credits](https://www.brevo.com/pricing/). 500 registrations ≈ 500+ OTP emails (plus resends). Free tiers are often ~300/day; use a paid transactional plan before the event.
-3. **Confirm sender** — `noreply@mail.nxtlab.tech` verified, SPF/DKIM OK (same as section 1).
+3. **Confirm sender** — `noreply@hackspace.in` verified, SPF/DKIM OK (same as section 1).
 4. **Optional Cloud Run headroom** (SMTP still opens one connection per email):
 
 ```bash
@@ -831,8 +831,8 @@ The backend uses `FIREBASE_PRIVATE_KEY` + `FIREBASE_CLIENT_EMAIL`.
 
 **Important:** Firebase service accounts **cannot** create spreadsheets in their own Drive (no storage quota). One-time setup:
 
-1. As `admin@nxtwave.co.in` (or any user), create a Google Drive folder e.g. **Hackathon Exports**
-2. **Share** the folder with `firebase-adminsdk-fbsvc@nxt-acad-hackathon.iam.gserviceaccount.com` as **Editor**
+1. As `admin@hackspace.in` (or any user), create a Google Drive folder e.g. **Hackathon Exports**
+2. **Share** the folder with `firebase-adminsdk-fbsvc@YOUR_PROJECT_ID.iam.gserviceaccount.com` as **Editor**
 3. Copy the folder id from the URL: `https://drive.google.com/drive/folders/FOLDER_ID_HERE`
 4. Set in `.env` / Cloud Run:
 
@@ -1003,7 +1003,7 @@ Empty list: “No hackathons are open yet.”
 
 ## Frontend handoff — hackathon rounds (copy to frontend repo)
 
-Use this section as the implementation spec for the **hackniat** admin + student UI.
+Use this section as the implementation spec for the Hackspace admin and student UI.
 
 ### Admin: create / edit hackathon
 

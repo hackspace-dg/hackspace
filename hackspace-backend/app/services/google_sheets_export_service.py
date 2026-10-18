@@ -232,7 +232,7 @@ class GoogleSheetsExportService:
             service_email = os.getenv("FIREBASE_CLIENT_EMAIL", "your-service-account")
             raise InfrastructureError(
                 "GOOGLE_SHEETS_EXPORT_FOLDER_ID is not set. In Google Drive, create "
-                f"a folder (e.g. as admin@nxtwave.co.in), share it with {service_email} "
+                f"a folder (e.g. as admin@hackspace.in), share it with {service_email} "
                 "as Editor, copy the folder id from the URL, and set "
                 "GOOGLE_SHEETS_EXPORT_FOLDER_ID in .env.",
                 code="SHEETS_FOLDER_NOT_CONFIGURED",
